@@ -41,14 +41,65 @@
       transition: opacity 0.03s ease-in;
     }
 
-    /* Экран отсчета: «Что-то произойдет через X» */
-    .countdown-screen {
+    /* 1. Экран с первым текстом при открытии */
+    .welcome-screen {
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      max-width: 320px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInText 1.4s ease-out forwards;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    @keyframes fadeInText {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .welcome-text {
+      font-size: 20px;
+      line-height: 1.6;
+      color: #eaeaea;
+      font-weight: 400;
+    }
+
+    .welcome-text strong {
+      font-size: 22px;
+      color: #ffffff;
+      font-weight: 600;
+      display: block;
+      margin-top: 8px;
+    }
+
+    .welcome-screen.fade-out {
+      opacity: 0;
+      transform: scale(0.92);
+      pointer-events: none;
+    }
+
+    /* 2. Экран отсчета: «Сейчас что-то произойдет через X» */
+    .countdown-screen {
+      display: none;
       align-items: center;
       justify-content: center;
       text-align: center;
       padding: 20px;
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      opacity: 0;
+      transform: scale(0.94);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .countdown-screen.fade-in {
+      display: flex;
+      opacity: 1;
+      transform: scale(1);
     }
 
     .countdown-screen.fade-out {
@@ -58,21 +109,20 @@
     }
 
     .countdown-msg {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 500;
       color: #e0e0e5;
       letter-spacing: -0.3px;
       line-height: 1.4;
     }
 
-    /* Анимированная цифра отсчета */
     .timer-digit {
       display: inline-block;
-      font-size: 38px;
+      font-size: 36px;
       font-weight: 700;
       color: #ffffff;
       margin-left: 6px;
-      min-width: 26px;
+      min-width: 24px;
       animation: digitPop 1s ease-in-out infinite;
     }
 
@@ -82,7 +132,7 @@
       100% { transform: scale(1); opacity: 0.85; }
     }
 
-    /* Главная сцена: Polaroid и выезжающее фото */
+    /* 3. Главная сцена: Polaroid и карточка */
     .stage {
       display: none;
       flex-direction: column;
@@ -119,7 +169,6 @@
       align-items: center;
     }
 
-    /* Красная кнопка спуска */
     .cam-shutter {
       position: absolute;
       top: -6px;
@@ -131,7 +180,6 @@
       box-shadow: 0 -2px 8px rgba(230, 48, 37, 0.4);
     }
 
-    /* Правый выступ корпуса */
     .cam-bump {
       position: absolute;
       top: -8px;
@@ -143,7 +191,6 @@
       border-top: 1px solid #28282b;
     }
 
-    /* Радужная полоска Spectrum */
     .spectrum-stripe {
       position: absolute;
       top: 18px;
@@ -163,7 +210,6 @@
     .stripe-green  { flex: 1; background: #00a651; }
     .stripe-blue   { flex: 1; background: #0085ca; }
 
-    /* Вспышка слева */
     .cam-flash {
       position: absolute;
       top: 36px;
@@ -206,7 +252,6 @@
       border-radius: 50%;
     }
 
-    /* Объектив по центру */
     .cam-lens {
       position: absolute;
       top: 34px;
@@ -248,7 +293,6 @@
       transform: rotate(-35deg);
     }
 
-    /* Видоискатель справа */
     .cam-viewfinder {
       position: absolute;
       top: 36px;
@@ -281,7 +325,6 @@
       border-radius: 2px;
     }
 
-    /* Логотип polaroid */
     .cam-brand {
       position: absolute;
       right: 28px;
@@ -293,7 +336,6 @@
       text-transform: lowercase;
     }
 
-    /* Щель эжектора */
     .cam-slot {
       position: absolute;
       bottom: 22px;
@@ -305,7 +347,6 @@
       border: 1px solid #222225;
     }
 
-    /* Лоток выезда карточки */
     .photo-tray {
       width: 100%;
       display: flex;
@@ -314,7 +355,6 @@
       z-index: 10;
     }
 
-    /* Карточка Polaroid */
     .polaroid-card {
       width: 236px;
       background: #fdfbf7;
@@ -334,7 +374,6 @@
       opacity: 1;
     }
 
-    /* Окно изображения */
     .photo-area {
       width: 100%;
       height: 210px;
@@ -355,7 +394,6 @@
       filter: grayscale(0%) brightness(1) contrast(1);
     }
 
-    /* Текст под фото */
     .photo-words {
       margin-top: 14px;
       color: #242426;
@@ -376,23 +414,31 @@
 </head>
 <body>
 
-  <!-- Белая вспышка -->
+  <!-- Вспышка -->
   <div class="flash" id="flash"></div>
 
-  <!-- Экран отсчета -->
-  <div class="countdown-screen" id="countdownScreen">
-    <div class="countdown-msg">
-      Что-то произойдет через <span class="timer-digit" id="timerDigit">5</span>
+  <!-- 1. Первый экран с вашим текстом -->
+  <div class="welcome-screen" id="welcomeScreen">
+    <div class="welcome-text">
+      5 месяцев разлуки закончились прямо сейчас.<br>
+      Этот брелок — напоминание, что мы снова рядом.<br>
+      <strong>Наконец-то мы вместе.</strong>
     </div>
   </div>
 
-  <!-- Polaroid и карточка -->
+  <!-- 2. Экран таймера -->
+  <div class="countdown-screen" id="countdownScreen">
+    <div class="countdown-msg">
+      Сейчас что-то произойдет через <span class="timer-digit" id="timerDigit">5</span>
+    </div>
+  </div>
+
+  <!-- 3. Polaroid и печать -->
   <div class="stage" id="stage">
     <div class="polaroid-cam">
       <div class="cam-shutter"></div>
       <div class="cam-bump"></div>
 
-      <!-- Фирменная радуга -->
       <div class="spectrum-stripe">
         <div class="stripe-red"></div>
         <div class="stripe-orange"></div>
@@ -401,7 +447,6 @@
         <div class="stripe-blue"></div>
       </div>
 
-      <!-- Вспышка -->
       <div class="cam-flash">
         <div class="flash-grid"></div>
         <div class="flash-sensor-row">
@@ -411,43 +456,36 @@
         </div>
       </div>
 
-      <!-- Объектив -->
       <div class="cam-lens">
         <div class="lens-core">
           <div class="lens-glint"></div>
         </div>
       </div>
 
-      <!-- Видоискатель -->
       <div class="cam-viewfinder">
         <div class="vf-optic">
           <div class="vf-glint"></div>
         </div>
       </div>
 
-      <!-- Логотип -->
       <div class="cam-brand">polaroid</div>
-
-      <!-- Щель эжектора -->
       <div class="cam-slot"></div>
     </div>
 
-    <!-- Выезжающее фото -->
     <div class="photo-tray">
       <div class="polaroid-card" id="card">
         <div class="photo-area">
           <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=700&q=80" alt="Moment" id="photoImg">
         </div>
         <div class="photo-words" id="photoWords">
-          5 месяцев разлуки закончились прямо сейчас.<br>
-          Этот брелок — напоминание, что мы снова рядом.<br>
-          <strong>Наконец-то мы вместе.</strong>
+          Наш первый общий снимок начинается здесь ✨
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    const welcomeScreen = document.getElementById('welcomeScreen');
     const countdownScreen = document.getElementById('countdownScreen');
     const timerDigit = document.getElementById('timerDigit');
     const stage = document.getElementById('stage');
@@ -456,13 +494,11 @@
     const photoImg = document.getElementById('photoImg');
     const photoWords = document.getElementById('photoWords');
 
-    // Генерация звука щелчка и моторчика Polaroid
     function playCameraSound() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         if (ctx.state === 'suspended') ctx.resume();
 
-        // 1. Щелчок спуска
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'triangle';
@@ -475,7 +511,6 @@
         osc.start();
         osc.stop(ctx.currentTime + 0.08);
 
-        // 2. Звук моторчика подачи кадра
         setTimeout(() => {
           const motor = ctx.createOscillator();
           const motorGain = ctx.createGain();
@@ -494,25 +529,38 @@
       }
     }
 
-    // Отсчет: 5 -> 4 -> 3 -> 2 -> 1
-    let count = 5;
-    const timerInterval = setInterval(() => {
-      count--;
-      if (count > 0) {
-        timerDigit.textContent = count;
-      } else {
-        clearInterval(timerInterval);
-        startSequence();
-      }
-    }, 1000);
+    // Текст держится на экране 4.5 секунды, чтобы его успели комфортно прочитать
+    setTimeout(() => {
+      welcomeScreen.classList.add('fade-out');
 
-    function startSequence() {
+      setTimeout(() => {
+        welcomeScreen.style.display = 'none';
+        countdownScreen.classList.add('fade-in');
+
+        // Запуск таймера: 5 -> 4 -> 3 -> 2 -> 1
+        let count = 5;
+        const timerInterval = setInterval(() => {
+          count--;
+          if (count > 0) {
+            timerDigit.textContent = count;
+          } else {
+            clearInterval(timerInterval);
+            triggerCamera();
+          }
+        }, 1000);
+
+      }, 800);
+    }, 4500);
+
+    function triggerCamera() {
+      countdownScreen.classList.remove('fade-in');
       countdownScreen.classList.add('fade-out');
 
       setTimeout(() => {
         countdownScreen.style.display = 'none';
         stage.classList.add('show');
 
+        // Фотоаппарат появляется, секунда паузы и щелчок
         setTimeout(() => {
           playCameraSound();
           flash.classList.add('active');
