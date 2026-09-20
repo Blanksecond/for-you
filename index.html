@@ -25,7 +25,7 @@
       padding: 20px 16px 40px;
     }
 
-    /* Яркая вспышка на весь экран */
+    /* Вспышка на весь экран */
     .flash {
       position: fixed;
       inset: 0;
@@ -41,50 +41,158 @@
       transition: opacity 0.03s ease-in;
     }
 
-    /* 1. Экран с первым текстом при открытии */
-    .welcome-screen {
+    /* 1. ЭКРАН С БРЕЛОКОМ */
+    .keychain-screen {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: 24px;
+      width: 100%;
       max-width: 320px;
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeInText 1.4s ease-out forwards;
       transition: opacity 0.8s ease, transform 0.8s ease;
+      cursor: pointer;
     }
 
-    @keyframes fadeInText {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .welcome-text {
-      font-size: 20px;
-      line-height: 1.6;
-      color: #eaeaea;
-      font-weight: 400;
-    }
-
-    .welcome-text strong {
-      font-size: 22px;
-      color: #ffffff;
-      font-weight: 600;
-      display: block;
-      margin-top: 8px;
-    }
-
-    .welcome-screen.fade-out {
+    .keychain-screen.hidden {
       opacity: 0;
-      transform: scale(0.92);
+      transform: scale(0.85);
       pointer-events: none;
     }
 
-    /* 2. Экран отсчета: «Сейчас что-то произойдет через X» */
+    /* Металлическая цепочка и кольцо */
+    .chain-rig {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: -6px;
+      z-index: 2;
+    }
+
+    .keyring {
+      width: 38px;
+      height: 38px;
+      border: 4px solid #b0b3b8;
+      border-radius: 50%;
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 3px 8px rgba(0,0,0,0.5);
+    }
+
+    .chain-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: -2px;
+    }
+
+    .chain-link {
+      width: 7px;
+      height: 12px;
+      border: 2px solid #8e9297;
+      border-radius: 5px;
+      margin-top: -4px;
+      background: #4a4d52;
+    }
+
+    /* Контейнер сердечка и текста внутри */
+    .heart-wrapper {
+      position: relative;
+      width: 250px;
+      height: 225px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 800px;
+    }
+
+    /* Текст внутри сердечка */
+    .secret-message {
+      position: absolute;
+      width: 230px;
+      text-align: center;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #f7f7f7;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      z-index: 1;
+      padding: 10px;
+      pointer-events: none;
+    }
+
+    .secret-message strong {
+      color: #ff9ebb;
+      display: block;
+      margin-top: 6px;
+      font-size: 16px;
+    }
+
+    .secret-message.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Створки сердечка (левая и правая половинки) */
+    .heart-half {
+      position: absolute;
+      top: 0;
+      width: 125px;
+      height: 225px;
+      overflow: hidden;
+      transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 5;
+    }
+
+    .heart-left {
+      left: 0;
+      transform-origin: left center;
+    }
+
+    .heart-right {
+      right: 0;
+      transform-origin: right center;
+    }
+
+    /* Состояние открытых дверец */
+    .heart-wrapper.opened .heart-left {
+      transform: translateX(-70px) rotateY(-65deg);
+    }
+
+    .heart-wrapper.opened .heart-right {
+      transform: translateX(70px) rotateY(65deg);
+    }
+
+    /* Внутренняя форма сердца в каждой створке */
+    .heart-shape {
+      position: absolute;
+      width: 250px;
+      height: 225px;
+      top: 0;
+    }
+
+    .heart-left .heart-shape {
+      left: 0;
+    }
+
+    .heart-right .heart-shape {
+      left: -125px;
+    }
+
+    /* Подсказка "Коснись сердечка" */
+    .tap-hint {
+      margin-top: 24px;
+      font-size: 14px;
+      color: #888892;
+      letter-spacing: 0.5px;
+      animation: pulseText 1.6s ease-in-out infinite;
+      transition: opacity 0.4s ease;
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+
+    /* 2. ЭКРАН ТАЙМЕРА */
     .countdown-screen {
       display: none;
       align-items: center;
@@ -132,7 +240,7 @@
       100% { transform: scale(1); opacity: 0.85; }
     }
 
-    /* 3. Главная сцена: Polaroid и карточка */
+    /* 3. ГЛАВНАЯ СЦЕНА POLAROID */
     .stage {
       display: none;
       flex-direction: column;
@@ -151,17 +259,14 @@
       transform: scale(1);
     }
 
-    /* Корпус Polaroid Now */
+    /* Корпус камеры */
     .polaroid-cam {
       width: 310px;
       height: 250px;
       background: #18181a;
       border-radius: 46px 46px 28px 28px;
       position: relative;
-      box-shadow: 
-        0 25px 60px rgba(0, 0, 0, 0.85),
-        inset 0 1px 2px rgba(255, 255, 255, 0.15),
-        inset 0 -3px 8px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), inset 0 1px 2px rgba(255, 255, 255, 0.15);
       z-index: 20;
       border: 1px solid #28282b;
       display: flex;
@@ -201,7 +306,6 @@
       display: flex;
       border-radius: 3px;
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
       z-index: 5;
     }
     .stripe-red    { flex: 1; background: #ea3323; }
@@ -219,22 +323,12 @@
       background: #0f0f11;
       border-radius: 12px;
       border: 2px solid #2c2c30;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
     }
     .flash-grid {
       width: 100%;
       height: 38px;
-      background: repeating-linear-gradient(
-        90deg,
-        rgba(255,255,255,0.7) 0px,
-        rgba(255,255,255,0.7) 2px,
-        rgba(20,20,25,0.6) 2px,
-        rgba(20,20,25,0.6) 4px
-      );
+      background: repeating-linear-gradient(90deg, rgba(255,255,255,0.7) 0px, rgba(255,255,255,0.7) 2px, rgba(20,20,25,0.6) 2px, rgba(20,20,25,0.6) 4px);
       border-bottom: 2px solid #333;
     }
     .flash-sensor-row {
@@ -245,12 +339,7 @@
       gap: 4px;
       padding-left: 6px;
     }
-    .sensor-dot {
-      width: 4px;
-      height: 4px;
-      background: #2b2b2e;
-      border-radius: 50%;
-    }
+    .sensor-dot { width: 4px; height: 4px; background: #2b2b2e; border-radius: 50%; }
 
     .cam-lens {
       position: absolute;
@@ -260,15 +349,8 @@
       width: 106px;
       height: 106px;
       border-radius: 50%;
-      background: repeating-radial-gradient(
-        circle,
-        #111113 0,
-        #111113 3px,
-        #222226 3px,
-        #222226 5px
-      );
+      background: repeating-radial-gradient(circle, #111113 0, #111113 3px, #222226 3px, #222226 5px);
       border: 5px solid #252529;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -279,7 +361,6 @@
       border-radius: 50%;
       background: radial-gradient(circle at 35% 35%, #304254 0%, #080c10 75%);
       border: 3px solid #141416;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.9);
       position: relative;
     }
     .lens-glint {
@@ -305,7 +386,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: inset 0 0 12px rgba(0,0,0,0.9);
     }
     .vf-optic {
       width: 48px;
@@ -343,10 +423,11 @@
       height: 14px;
       background: #09090b;
       border-radius: 7px;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 1px 1px rgba(255,255,255,0.1);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.9);
       border: 1px solid #222225;
     }
 
+    /* Лоток выезда фото */
     .photo-tray {
       width: 100%;
       display: flex;
@@ -414,16 +495,54 @@
 </head>
 <body>
 
-  <!-- Вспышка -->
+  <!-- Белая вспышка -->
   <div class="flash" id="flash"></div>
 
-  <!-- 1. Первый экран с вашим текстом -->
-  <div class="welcome-screen" id="welcomeScreen">
-    <div class="welcome-text">
-      5 месяцев разлуки закончились прямо сейчас.<br>
-      Этот брелок — напоминание, что мы снова рядом.<br>
-      <strong>Наконец-то мы вместе.</strong>
+  <!-- 1. Экран с интерактивным брелоком-сердечком -->
+  <div class="keychain-screen" id="keychainScreen">
+    <div class="chain-rig">
+      <div class="keyring"></div>
+      <div class="chain-links">
+        <div class="chain-link"></div>
+        <div class="chain-link"></div>
+        <div class="chain-link"></div>
+      </div>
     </div>
+
+    <div class="heart-wrapper" id="heartWrapper">
+      <!-- Текст внутри створок -->
+      <div class="secret-message" id="secretMsg">
+        5 месяцев разлуки закончились прямо сейчас.<br>
+        Этот брелок — напоминание, что мы снова рядом.<br>
+        <strong>Наконец-то мы вместе.</strong>
+      </div>
+
+      <!-- Левая створка сердечка -->
+      <div class="heart-half heart-left">
+        <svg class="heart-shape" viewBox="0 0 200 180">
+          <path d="M100,170 C100,170 10,115 10,55 C10,22 35,5 65,5 C82,5 94,15 100,25 C106,15 118,5 135,5 C165,5 190,22 190,55 C190,115 100,170 100,170 Z" 
+                fill="#f89cb4" stroke="#e07a95" stroke-width="3" filter="drop-shadow(0px 8px 16px rgba(0,0,0,0.4))"/>
+          <!-- Дуги значка NFC -->
+          <path d="M82,75 A26,26 0 0,1 100,68" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M86,88 A16,16 0 0,1 100,82" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M91,101 A7,7 0 0,1 100,97" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- Правая створка сердечка -->
+      <div class="heart-half heart-right">
+        <svg class="heart-shape" viewBox="0 0 200 180">
+          <path d="M100,170 C100,170 10,115 10,55 C10,22 35,5 65,5 C82,5 94,15 100,25 C106,15 118,5 135,5 C165,5 190,22 190,55 C190,115 100,170 100,170 Z" 
+                fill="#f89cb4" stroke="#e07a95" stroke-width="3" filter="drop-shadow(0px 8px 16px rgba(0,0,0,0.4))"/>
+          <!-- Дуги значка NFC -->
+          <path d="M100,68 A26,26 0 0,1 118,75" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M100,82 A16,16 0 0,1 114,88" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M100,97 A7,7 0 0,1 109,101" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="tap-hint" id="tapHint">Коснись сердечка ✨</div>
   </div>
 
   <!-- 2. Экран таймера -->
@@ -433,7 +552,7 @@
     </div>
   </div>
 
-  <!-- 3. Polaroid и печать -->
+  <!-- 3. Polaroid и печать фото -->
   <div class="stage" id="stage">
     <div class="polaroid-cam">
       <div class="cam-shutter"></div>
@@ -485,7 +604,11 @@
   </div>
 
   <script>
-    const welcomeScreen = document.getElementById('welcomeScreen');
+    const keychainScreen = document.getElementById('keychainScreen');
+    const heartWrapper = document.getElementById('heartWrapper');
+    const secretMsg = document.getElementById('secretMsg');
+    const tapHint = document.getElementById('tapHint');
+
     const countdownScreen = document.getElementById('countdownScreen');
     const timerDigit = document.getElementById('timerDigit');
     const stage = document.getElementById('stage');
@@ -494,6 +617,9 @@
     const photoImg = document.getElementById('photoImg');
     const photoWords = document.getElementById('photoWords');
 
+    let isOpened = false;
+
+    // Звук затвора и моторчика Polaroid
     function playCameraSound() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -525,33 +651,58 @@
           motor.stop(ctx.currentTime + 1.4);
         }, 120);
       } catch (e) {
-        console.warn("Audio Context init prevented", e);
+        console.warn("Audio Context error", e);
       }
     }
 
-    // Текст держится на экране 4.5 секунды, чтобы его успели комфортно прочитать
-    setTimeout(() => {
-      welcomeScreen.classList.add('fade-out');
+    // Тап по брелоку
+    keychainScreen.addEventListener('click', () => {
+      if (isOpened) return;
+      isOpened = true;
 
+      // 1. Прячем подсказку, распахиваем сердечко
+      tapHint.style.opacity = '0';
+      heartWrapper.classList.add('opened');
+      
       setTimeout(() => {
-        welcomeScreen.style.display = 'none';
-        countdownScreen.classList.add('fade-in');
+        secretMsg.classList.add('visible');
+      }, 300);
 
-        // Запуск таймера: 5 -> 4 -> 3 -> 2 -> 1
-        let count = 5;
-        const timerInterval = setInterval(() => {
-          count--;
-          if (count > 0) {
-            timerDigit.textContent = count;
-          } else {
-            clearInterval(timerInterval);
-            triggerCamera();
-          }
-        }, 1000);
+      // 2. Ровно через 5 секунд сердечко захлопывается и исчезает
+      setTimeout(() => {
+        secretMsg.classList.remove('visible');
+        heartWrapper.classList.remove('opened');
 
-      }, 800);
-    }, 4500);
+        setTimeout(() => {
+          keychainScreen.classList.add('hidden');
 
+          setTimeout(() => {
+            keychainScreen.style.display = 'none';
+            startCountdown();
+          }, 800);
+
+        }, 600);
+
+      }, 5000);
+    });
+
+    // Запуск таймера: 5 -> 4 -> 3 -> 2 -> 1
+    function startCountdown() {
+      countdownScreen.classList.add('fade-in');
+
+      let count = 5;
+      const timerInterval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          timerDigit.textContent = count;
+        } else {
+          clearInterval(timerInterval);
+          triggerCamera();
+        }
+      }, 1000);
+    }
+
+    // Появление камеры и печать фото
     function triggerCamera() {
       countdownScreen.classList.remove('fade-in');
       countdownScreen.classList.add('fade-out');
@@ -560,7 +711,6 @@
         countdownScreen.style.display = 'none';
         stage.classList.add('show');
 
-        // Фотоаппарат появляется, секунда паузы и щелчок
         setTimeout(() => {
           playCameraSound();
           flash.classList.add('active');
