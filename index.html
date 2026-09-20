@@ -13,224 +13,354 @@
     }
 
     body {
-      background-color: #141414;
-      color: #f5f5f7;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #0d0d0f;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       overflow-x: hidden;
-      padding: 24px;
+      padding: 20px 16px 40px;
     }
 
-    /* Эффект яркой белой вспышки */
+    /* Яркая вспышка на весь экран */
     .flash {
       position: fixed;
       inset: 0;
       background: #ffffff;
       opacity: 0;
       pointer-events: none;
-      z-index: 1000;
-      transition: opacity 0.7s ease-out;
+      z-index: 9999;
+      transition: opacity 0.7s cubic-bezier(0.1, 0.9, 0.2, 1);
     }
 
     .flash.active {
       opacity: 1;
-      transition: opacity 0.04s ease-in;
+      transition: opacity 0.03s ease-in;
     }
 
-    /* Экран приглашения к нажатию */
-    .intro-screen {
+    /* Экран отсчета: «Что-то произойдет через X» */
+    .countdown-screen {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 16px;
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      justify-content: center;
       text-align: center;
+      padding: 20px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
 
-    .intro-screen.hidden {
+    .countdown-screen.fade-out {
       opacity: 0;
-      transform: scale(0.95);
+      transform: scale(0.92);
       pointer-events: none;
-      display: none;
     }
 
-    .action-btn {
-      background: #fdfbf7;
-      color: #1a1a1a;
-      border: none;
-      padding: 16px 36px;
-      font-size: 17px;
-      font-weight: 600;
-      border-radius: 40px;
-      cursor: pointer;
-      box-shadow: 0 8px 30px rgba(255, 255, 255, 0.12);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    .countdown-msg {
+      font-size: 26px;
+      font-weight: 500;
+      color: #e0e0e5;
+      letter-spacing: -0.3px;
+      line-height: 1.4;
     }
 
-    .action-btn:active {
-      transform: scale(0.96);
+    /* Анимированная цифра отсчета */
+    .timer-digit {
+      display: inline-block;
+      font-size: 38px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-left: 6px;
+      min-width: 26px;
+      animation: digitPop 1s ease-in-out infinite;
     }
 
-    /* Сцена фотоаппарата и выезжающего фото */
+    @keyframes digitPop {
+      0% { transform: scale(1); opacity: 0.85; }
+      40% { transform: scale(1.22); opacity: 1; color: #ff5252; }
+      100% { transform: scale(1); opacity: 0.85; }
+    }
+
+    /* Главная сцена: Polaroid и выезжающее фото */
     .stage {
       display: none;
       flex-direction: column;
       align-items: center;
       width: 100%;
-      max-width: 320px;
+      max-width: 330px;
       position: relative;
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
-    .stage.visible {
+    .stage.show {
       display: flex;
+      opacity: 1;
+      transform: scale(1);
     }
 
-    /* Корпус камеры */
-    .camera {
-      width: 250px;
-      height: 170px;
-      background: #242426;
-      border-radius: 36px;
+    /* Корпус Polaroid Now */
+    .polaroid-cam {
+      width: 310px;
+      height: 250px;
+      background: #18181a;
+      border-radius: 46px 46px 28px 28px;
       position: relative;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 2px 4px rgba(255, 255, 255, 0.1);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.85),
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -3px 8px rgba(0, 0, 0, 0.7);
       z-index: 20;
-      border: 1px solid #333336;
-    }
-
-    /* Красная кнопка спуска */
-    .shutter-button {
-      position: absolute;
-      top: -8px;
-      left: 36px;
-      width: 34px;
-      height: 10px;
-      background: #e63946;
-      border-radius: 4px 4px 0 0;
-      box-shadow: 0 -2px 6px rgba(230, 57, 70, 0.4);
-    }
-
-    /* Вспышка на корпусе */
-    .flash-window {
-      position: absolute;
-      top: 20px;
-      right: 24px;
-      width: 28px;
-      height: 28px;
-      background: radial-gradient(circle, #fff 15%, #ccc 60%, #999 100%);
-      border-radius: 8px;
-      border: 2px solid #444;
-      box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Видоискатель */
-    .viewfinder {
-      position: absolute;
-      top: 24px;
-      left: 28px;
-      width: 16px;
-      height: 16px;
-      background: #111;
-      border-radius: 4px;
-      border: 2px solid #444;
-    }
-
-    /* Объектив камеры */
-    .lens-outer {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #1a1a1a 45%, #2a2a2a 70%, #444 100%);
-      border: 6px solid #38383a;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .lens-glass {
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #2b3a4a 0%, #0a0e14 70%);
-      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
-      position: relative;
-    }
-
-    .lens-glare {
-      position: absolute;
-      top: 10px;
-      left: 12px;
-      width: 12px;
-      height: 6px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
-      transform: rotate(-35deg);
-    }
-
-    /* Слот выхода фотографии */
-    .slot {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: -24px;
-      z-index: 10;
-    }
-
-    /* Карточка моментального фото */
-    .polaroid {
-      width: 230px;
-      background: #fdfbf7;
-      padding: 14px 14px 22px 14px;
-      border-radius: 4px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border: 1px solid #28282b;
       display: flex;
       flex-direction: column;
       align-items: center;
-      transform: translateY(-240px);
-      opacity: 0;
-      transition: transform 3.8s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.4s ease;
     }
 
-    .polaroid.ejected {
-      transform: translateY(24px);
+    /* Красная кнопка спуска */
+    .cam-shutter {
+      position: absolute;
+      top: -6px;
+      left: 60px;
+      width: 44px;
+      height: 12px;
+      background: #e63025;
+      border-radius: 6px 6px 0 0;
+      box-shadow: 0 -2px 8px rgba(230, 48, 37, 0.4);
+    }
+
+    /* Правый выступ корпуса */
+    .cam-bump {
+      position: absolute;
+      top: -8px;
+      right: 50px;
+      width: 60px;
+      height: 16px;
+      background: #18181a;
+      border-radius: 12px 12px 0 0;
+      border-top: 1px solid #28282b;
+    }
+
+    /* Радужная полоска Spectrum */
+    .spectrum-stripe {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 16px;
+      display: flex;
+      border-radius: 3px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      z-index: 5;
+    }
+    .stripe-red    { flex: 1; background: #ea3323; }
+    .stripe-orange { flex: 1; background: #f37021; }
+    .stripe-yellow { flex: 1; background: #ffc20e; }
+    .stripe-green  { flex: 1; background: #00a651; }
+    .stripe-blue   { flex: 1; background: #0085ca; }
+
+    /* Вспышка слева */
+    .cam-flash {
+      position: absolute;
+      top: 36px;
+      left: 18px;
+      width: 78px;
+      height: 56px;
+      background: #0f0f11;
+      border-radius: 12px;
+      border: 2px solid #2c2c30;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .flash-grid {
+      width: 100%;
+      height: 38px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.7) 0px,
+        rgba(255,255,255,0.7) 2px,
+        rgba(20,20,25,0.6) 2px,
+        rgba(20,20,25,0.6) 4px
+      );
+      border-bottom: 2px solid #333;
+    }
+    .flash-sensor-row {
+      height: 14px;
+      background: #151518;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-left: 6px;
+    }
+    .sensor-dot {
+      width: 4px;
+      height: 4px;
+      background: #2b2b2e;
+      border-radius: 50%;
+    }
+
+    /* Объектив по центру */
+    .cam-lens {
+      position: absolute;
+      top: 34px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 106px;
+      height: 106px;
+      border-radius: 50%;
+      background: repeating-radial-gradient(
+        circle,
+        #111113 0,
+        #111113 3px,
+        #222226 3px,
+        #222226 5px
+      );
+      border: 5px solid #252529;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lens-core {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #304254 0%, #080c10 75%);
+      border: 3px solid #141416;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.9);
+      position: relative;
+    }
+    .lens-glint {
+      position: absolute;
+      top: 7px;
+      left: 9px;
+      width: 11px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      transform: rotate(-35deg);
+    }
+
+    /* Видоискатель справа */
+    .cam-viewfinder {
+      position: absolute;
+      top: 36px;
+      right: 18px;
+      width: 78px;
+      height: 58px;
+      background: #0f0f11;
+      border-radius: 12px;
+      border: 2px solid #2c2c30;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 12px rgba(0,0,0,0.9);
+    }
+    .vf-optic {
+      width: 48px;
+      height: 38px;
+      background: radial-gradient(circle at 50% 40%, #1e2832 0%, #0a0e12 80%);
+      border-radius: 8px;
+      border: 1px solid #333;
+      position: relative;
+    }
+    .vf-glint {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      width: 8px;
+      height: 8px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 2px;
+    }
+
+    /* Логотип polaroid */
+    .cam-brand {
+      position: absolute;
+      right: 28px;
+      bottom: 58px;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: #888890;
+      text-transform: lowercase;
+    }
+
+    /* Щель эжектора */
+    .cam-slot {
+      position: absolute;
+      bottom: 22px;
+      width: 250px;
+      height: 14px;
+      background: #09090b;
+      border-radius: 7px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 1px 1px rgba(255,255,255,0.1);
+      border: 1px solid #222225;
+    }
+
+    /* Лоток выезда карточки */
+    .photo-tray {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: -34px;
+      z-index: 10;
+    }
+
+    /* Карточка Polaroid */
+    .polaroid-card {
+      width: 236px;
+      background: #fdfbf7;
+      padding: 13px 13px 24px 13px;
+      border-radius: 3px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: translateY(-260px);
+      opacity: 0;
+      transition: transform 3.6s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.3s ease;
+    }
+
+    .polaroid-card.ejected {
+      transform: translateY(32px);
       opacity: 1;
     }
 
-    /* Окошко с фото */
-    .photo-wrapper {
+    /* Окно изображения */
+    .photo-area {
       width: 100%;
-      height: 205px;
-      background: #1a1a1a;
-      border-radius: 2px;
+      height: 210px;
+      background: #141414;
+      border-radius: 1px;
       overflow: hidden;
     }
 
-    .photo-wrapper img {
+    .photo-area img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      /* Эффект химического проявления */
+      /* Термопроявление */
       filter: grayscale(100%) brightness(0.18) contrast(0.4);
       transition: filter 4.5s ease-out;
     }
 
-    .photo-wrapper img.developed {
+    .photo-area img.developed {
       filter: grayscale(0%) brightness(1) contrast(1);
     }
 
-    /* Подпись под фото */
-    .photo-caption {
+    /* Текст под фото */
+    .photo-words {
       margin-top: 14px;
-      color: #262626;
-      font-size: 14px;
+      color: #242426;
+      font-size: 13.5px;
       line-height: 1.45;
       text-align: center;
       font-weight: 500;
@@ -239,7 +369,7 @@
       transition: opacity 1.8s ease, transform 1.8s ease;
     }
 
-    .photo-caption.visible {
+    .photo-words.show {
       opacity: 1;
       transform: translateY(0);
     }
@@ -250,31 +380,66 @@
   <!-- Белая вспышка -->
   <div class="flash" id="flash"></div>
 
-  <!-- Кнопка первого экрана -->
-  <div class="intro-screen" id="introScreen">
-    <button class="action-btn" id="triggerBtn">Сделать снимок ✨</button>
+  <!-- Экран отсчета -->
+  <div class="countdown-screen" id="countdownScreen">
+    <div class="countdown-msg">
+      Что-то произойдет через <span class="timer-digit" id="timerDigit">5</span>
+    </div>
   </div>
 
-  <!-- Сцена камеры и фото -->
+  <!-- Polaroid и карточка -->
   <div class="stage" id="stage">
-    <div class="camera">
-      <div class="shutter-button"></div>
-      <div class="viewfinder"></div>
-      <div class="lens-outer">
-        <div class="lens-glass">
-          <div class="lens-glare"></div>
+    <div class="polaroid-cam">
+      <div class="cam-shutter"></div>
+      <div class="cam-bump"></div>
+
+      <!-- Фирменная радуга -->
+      <div class="spectrum-stripe">
+        <div class="stripe-red"></div>
+        <div class="stripe-orange"></div>
+        <div class="stripe-yellow"></div>
+        <div class="stripe-green"></div>
+        <div class="stripe-blue"></div>
+      </div>
+
+      <!-- Вспышка -->
+      <div class="cam-flash">
+        <div class="flash-grid"></div>
+        <div class="flash-sensor-row">
+          <div class="sensor-dot"></div>
+          <div class="sensor-dot"></div>
+          <div class="sensor-dot"></div>
         </div>
       </div>
-      <div class="flash-window"></div>
+
+      <!-- Объектив -->
+      <div class="cam-lens">
+        <div class="lens-core">
+          <div class="lens-glint"></div>
+        </div>
+      </div>
+
+      <!-- Видоискатель -->
+      <div class="cam-viewfinder">
+        <div class="vf-optic">
+          <div class="vf-glint"></div>
+        </div>
+      </div>
+
+      <!-- Логотип -->
+      <div class="cam-brand">polaroid</div>
+
+      <!-- Щель эжектора -->
+      <div class="cam-slot"></div>
     </div>
 
-    <div class="slot">
-      <div class="polaroid" id="polaroid">
-        <div class="photo-wrapper">
-          <!-- Замени ссылку на свою картинку или локальный файл, например my-photo.jpg -->
-          <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=700&q=80" alt="Moment" id="photo">
+    <!-- Выезжающее фото -->
+    <div class="photo-tray">
+      <div class="polaroid-card" id="card">
+        <div class="photo-area">
+          <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=700&q=80" alt="Moment" id="photoImg">
         </div>
-        <div class="photo-caption" id="caption">
+        <div class="photo-words" id="photoWords">
           «Полгода ожидания подошли к концу.<br>Наш первый совместный кадр начинается здесь.»
         </div>
       </div>
@@ -282,39 +447,40 @@
   </div>
 
   <script>
-    const triggerBtn = document.getElementById('triggerBtn');
-    const introScreen = document.getElementById('introScreen');
+    const countdownScreen = document.getElementById('countdownScreen');
+    const timerDigit = document.getElementById('timerDigit');
     const stage = document.getElementById('stage');
     const flash = document.getElementById('flash');
-    const polaroid = document.getElementById('polaroid');
-    const photo = document.getElementById('photo');
-    const caption = document.getElementById('caption');
+    const card = document.getElementById('card');
+    const photoImg = document.getElementById('photoImg');
+    const photoWords = document.getElementById('photoWords');
 
-    // Генерация звука затвора и мотора печати (без внешних файлов)
-    function playShutterSound() {
+    // Генерация звука щелчка и моторчика Polaroid
+    function playCameraSound() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        // Щелчок затвора
+        if (ctx.state === 'suspended') ctx.resume();
+
+        // 1. Щелчок спуска
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(150, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.09);
-        gain.gain.setValueAtTime(0.85, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.09);
+        osc.frequency.setValueAtTime(140, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(25, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.8, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
-        osc.stop(ctx.currentTime + 0.09);
+        osc.stop(ctx.currentTime + 0.08);
 
-        // Моторчик подачи бумаги Instax
+        // 2. Звук моторчика подачи кадра
         setTimeout(() => {
           const motor = ctx.createOscillator();
           const motorGain = ctx.createGain();
           motor.type = 'sawtooth';
-          motor.frequency.setValueAtTime(75, ctx.currentTime);
-          motor.frequency.linearRampToValueAtTime(90, ctx.currentTime + 1.4);
+          motor.frequency.setValueAtTime(78, ctx.currentTime);
+          motor.frequency.linearRampToValueAtTime(92, ctx.currentTime + 1.4);
           motorGain.gain.setValueAtTime(0.06, ctx.currentTime);
           motorGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.4);
           motor.connect(motorGain);
@@ -327,34 +493,54 @@
       }
     }
 
-    triggerBtn.addEventListener('click', () => {
-      // Скрываем стартовую кнопку
-      introScreen.classList.add('hidden');
-      stage.classList.add('visible');
+    // Отсчет: 5 -> 4 -> 3 -> 2 -> 1
+    let count = 5;
+    const timerInterval = setInterval(() => {
+      count--;
+      if (count > 0) {
+        timerDigit.textContent = count;
+      } else {
+        clearInterval(timerInterval);
+        startSequence();
+      }
+    }, 1000);
 
-      // 1. Щелчок и белая вспышка
-      playShutterSound();
-      flash.classList.add('active');
+    function startSequence() {
+      // Плавное исчезновение фразы
+      countdownScreen.classList.add('fade-out');
 
       setTimeout(() => {
-        flash.classList.remove('active');
-      }, 90);
+        countdownScreen.style.display = 'none';
+        stage.classList.add('show');
 
-      // 2. Медленный выезд карточки из-под корпуса
-      setTimeout(() => {
-        polaroid.classList.add('ejected');
-      }, 250);
+        // Пауза полсекунды на появление камеры перед вспышкой
+        setTimeout(() => {
+          playCameraSound();
+          flash.classList.add('active');
 
-      // 3. Химическое проявление цветов фотографии
-      setTimeout(() => {
-        photo.classList.add('developed');
-      }, 1600);
+          setTimeout(() => {
+            flash.classList.remove('active');
+          }, 90);
 
-      // 4. Плавное появление надписи под фотографией
-      setTimeout(() => {
-        caption.classList.add('visible');
-      }, 3500);
-    });
+          // Карточка плавно выезжает из щели
+          setTimeout(() => {
+            card.classList.add('ejected');
+          }, 250);
+
+          // Проявление фото
+          setTimeout(() => {
+            photoImg.classList.add('developed');
+          }, 1600);
+
+          // Появление текста
+          setTimeout(() => {
+            photoWords.classList.add('show');
+          }, 3600);
+
+        }, 650);
+
+      }, 500);
+    }
   </script>
 </body>
 </html>
