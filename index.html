@@ -347,7 +347,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      /* Термопроявление */
       filter: grayscale(100%) brightness(0.18) contrast(0.4);
       transition: filter 4.5s ease-out;
     }
@@ -361,7 +360,7 @@
       margin-top: 14px;
       color: #242426;
       font-size: 13.5px;
-      line-height: 1.45;
+      line-height: 1.5;
       text-align: center;
       font-weight: 500;
       opacity: 0;
@@ -440,7 +439,9 @@
           <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=700&q=80" alt="Moment" id="photoImg">
         </div>
         <div class="photo-words" id="photoWords">
-          «Полгода ожидания подошли к концу.<br>Наш первый совместный кадр начинается здесь.»
+          5 месяцев разлуки закончились прямо сейчас.<br>
+          Этот брелок — напоминание, что мы снова рядом.<br>
+          <strong>Наконец-то мы вместе.</strong>
         </div>
       </div>
     </div>
@@ -506,14 +507,12 @@
     }, 1000);
 
     function startSequence() {
-      // Плавное исчезновение фразы
       countdownScreen.classList.add('fade-out');
 
       setTimeout(() => {
         countdownScreen.style.display = 'none';
         stage.classList.add('show');
 
-        // Пауза полсекунды на появление камеры перед вспышкой
         setTimeout(() => {
           playCameraSound();
           flash.classList.add('active');
@@ -522,17 +521,14 @@
             flash.classList.remove('active');
           }, 90);
 
-          // Карточка плавно выезжает из щели
           setTimeout(() => {
             card.classList.add('ejected');
           }, 250);
 
-          // Проявление фото
           setTimeout(() => {
             photoImg.classList.add('developed');
           }, 1600);
 
-          // Появление текста
           setTimeout(() => {
             photoWords.classList.add('show');
           }, 3600);
