@@ -13,7 +13,7 @@
     }
 
     body {
-      background-color: #0d0d0f;
+      background-color: #0b0b0e;
       color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
@@ -25,7 +25,7 @@
       padding: 20px 16px 40px;
     }
 
-    /* Вспышка на весь экран */
+    /* Вспышка */
     .flash {
       position: fixed;
       inset: 0;
@@ -59,7 +59,6 @@
       pointer-events: none;
     }
 
-    /* Металлическая цепочка и кольцо */
     .chain-rig {
       display: flex;
       flex-direction: column;
@@ -92,7 +91,6 @@
       background: #4a4d52;
     }
 
-    /* Контейнер сердечка и текста внутри */
     .heart-wrapper {
       position: relative;
       width: 250px;
@@ -103,7 +101,6 @@
       perspective: 800px;
     }
 
-    /* Текст внутри сердечка */
     .secret-message {
       position: absolute;
       width: 230px;
@@ -131,7 +128,6 @@
       transform: scale(1);
     }
 
-    /* Створки сердечка (левая и правая половинки) */
     .heart-half {
       position: absolute;
       top: 0;
@@ -142,26 +138,12 @@
       z-index: 5;
     }
 
-    .heart-left {
-      left: 0;
-      transform-origin: left center;
-    }
+    .heart-left { left: 0; transform-origin: left center; }
+    .heart-right { right: 0; transform-origin: right center; }
 
-    .heart-right {
-      right: 0;
-      transform-origin: right center;
-    }
+    .heart-wrapper.opened .heart-left { transform: translateX(-70px) rotateY(-65deg); }
+    .heart-wrapper.opened .heart-right { transform: translateX(70px) rotateY(65deg); }
 
-    /* Состояние открытых дверец */
-    .heart-wrapper.opened .heart-left {
-      transform: translateX(-70px) rotateY(-65deg);
-    }
-
-    .heart-wrapper.opened .heart-right {
-      transform: translateX(70px) rotateY(65deg);
-    }
-
-    /* Внутренняя форма сердца в каждой створке */
     .heart-shape {
       position: absolute;
       width: 250px;
@@ -169,15 +151,9 @@
       top: 0;
     }
 
-    .heart-left .heart-shape {
-      left: 0;
-    }
+    .heart-left .heart-shape { left: 0; }
+    .heart-right .heart-shape { left: -125px; }
 
-    .heart-right .heart-shape {
-      left: -125px;
-    }
-
-    /* Подсказка "Коснись сердечка" */
     .tap-hint {
       margin-top: 24px;
       font-size: 14px;
@@ -259,7 +235,6 @@
       transform: scale(1);
     }
 
-    /* Корпус камеры */
     .polaroid-cam {
       width: 310px;
       height: 250px;
@@ -434,6 +409,7 @@
       justify-content: center;
       margin-top: -34px;
       z-index: 10;
+      position: relative;
     }
 
     .polaroid-card {
@@ -448,6 +424,7 @@
       transform: translateY(-260px);
       opacity: 0;
       transition: transform 3.6s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.3s ease;
+      position: relative;
     }
 
     .polaroid-card.ejected {
@@ -461,6 +438,7 @@
       background: #141414;
       border-radius: 1px;
       overflow: hidden;
+      position: relative;
     }
 
     .photo-area img {
@@ -468,28 +446,153 @@
       height: 100%;
       object-fit: cover;
       filter: grayscale(100%) brightness(0.18) contrast(0.4);
-      transition: filter 4.5s ease-out;
+      transition: filter 4.5s ease-out, opacity 1s ease;
     }
 
     .photo-area img.developed {
       filter: grayscale(0%) brightness(1) contrast(1);
     }
 
+    .photo-area img.dimmed {
+      opacity: 0.35;
+      filter: brightness(0.5) contrast(0.8);
+    }
+
     .photo-words {
       margin-top: 14px;
       color: #242426;
-      font-size: 13.5px;
-      line-height: 1.5;
+      font-size: 13px;
+      line-height: 1.45;
       text-align: center;
       font-weight: 500;
       opacity: 0;
       transform: translateY(6px);
-      transition: opacity 1.8s ease, transform 1.8s ease;
+      transition: opacity 1.8s ease, transform 1.8s ease, color 1s ease;
     }
 
     .photo-words.show {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    /* 4. ГОЛОГРАММА HELLO KITTY */
+    .hologram-stage {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 210px;
+      height: 210px;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      opacity: 0;
+      z-index: 30;
+      transition: opacity 1.2s ease;
+    }
+
+    .hologram-stage.active {
+      opacity: 1;
+    }
+
+    .holo-light-beam {
+      position: absolute;
+      bottom: -10px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(ellipse at bottom, rgba(255, 105, 180, 0.45) 0%, rgba(255, 105, 180, 0.12) 50%, transparent 75%);
+      filter: blur(10px);
+      animation: beamFlicker 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes beamFlicker {
+      0% { opacity: 0.7; transform: scaleX(0.95); }
+      100% { opacity: 1; transform: scaleX(1.08); }
+    }
+
+    .holo-kitty-figure {
+      position: relative;
+      width: 150px;
+      height: 165px;
+      margin-bottom: 15px;
+      transform: translateY(30px) scale(0.7);
+      opacity: 0;
+      transition: transform 1.8s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 1.2s ease;
+      filter: drop-shadow(0 0 12px #ff4785) drop-shadow(0 0 25px rgba(255, 71, 133, 0.6));
+    }
+
+    .hologram-stage.risen .holo-kitty-figure {
+      transform: translateY(-20px) scale(1.05);
+      opacity: 1;
+      animation: holoFloat 3.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes holoFloat {
+      0% { transform: translateY(-20px) scale(1.05) rotate(-1deg); }
+      50% { transform: translateY(-30px) scale(1.08) rotate(1deg); }
+      100% { transform: translateY(-22px) scale(1.05) rotate(-0.5deg); }
+    }
+
+    .holo-scanlines {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 182, 193, 0.15) 0px,
+        rgba(255, 182, 193, 0.15) 2px,
+        transparent 2px,
+        transparent 5px
+      );
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      animation: scanMove 6s linear infinite;
+    }
+
+    @keyframes scanMove {
+      from { background-position: 0 0; }
+      to { background-position: 0 100px; }
+    }
+
+    .holo-heart {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.4), opacity 0.8s ease;
+      filter: drop-shadow(0 0 10px #ff2a70) drop-shadow(0 0 20px #ff75a0);
+    }
+
+    .holo-heart.active {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      animation: heartBeat 1.4s ease-in-out infinite;
+    }
+
+    @keyframes heartBeat {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      15% { transform: translate(-50%, -50%) scale(1.22); }
+      30% { transform: translate(-50%, -50%) scale(1.05); }
+      45% { transform: translate(-50%, -50%) scale(1.25); }
+    }
+
+    .sparkle {
+      position: absolute;
+      color: #ff99cc;
+      font-size: 14px;
+      opacity: 0;
+      animation: sparkleAnim 2s infinite ease-in-out;
+    }
+    .sp1 { top: 10px; left: 15px; animation-delay: 0.3s; }
+    .sp2 { top: 15px; right: 20px; animation-delay: 0.8s; }
+    .sp3 { top: 70px; right: 10px; animation-delay: 1.2s; }
+    .sp4 { top: 75px; left: 10px; animation-delay: 1.6s; }
+
+    @keyframes sparkleAnim {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: 1; transform: scale(1.2); }
     }
   </style>
 </head>
@@ -510,31 +613,26 @@
     </div>
 
     <div class="heart-wrapper" id="heartWrapper">
-      <!-- Текст внутри створок -->
       <div class="secret-message" id="secretMsg">
         5 месяцев разлуки закончились прямо сейчас.<br>
         Этот брелок — напоминание, что мы снова рядом.<br>
         <strong>Наконец-то мы вместе.</strong>
       </div>
 
-      <!-- Левая створка сердечка -->
       <div class="heart-half heart-left">
         <svg class="heart-shape" viewBox="0 0 200 180">
           <path d="M100,170 C100,170 10,115 10,55 C10,22 35,5 65,5 C82,5 94,15 100,25 C106,15 118,5 135,5 C165,5 190,22 190,55 C190,115 100,170 100,170 Z" 
                 fill="#f89cb4" stroke="#e07a95" stroke-width="3" filter="drop-shadow(0px 8px 16px rgba(0,0,0,0.4))"/>
-          <!-- Дуги значка NFC -->
           <path d="M82,75 A26,26 0 0,1 100,68" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
           <path d="M86,88 A16,16 0 0,1 100,82" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
           <path d="M91,101 A7,7 0 0,1 100,97" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
         </svg>
       </div>
 
-      <!-- Правая створка сердечка -->
       <div class="heart-half heart-right">
         <svg class="heart-shape" viewBox="0 0 200 180">
           <path d="M100,170 C100,170 10,115 10,55 C10,22 35,5 65,5 C82,5 94,15 100,25 C106,15 118,5 135,5 C165,5 190,22 190,55 C190,115 100,170 100,170 Z" 
                 fill="#f89cb4" stroke="#e07a95" stroke-width="3" filter="drop-shadow(0px 8px 16px rgba(0,0,0,0.4))"/>
-          <!-- Дуги значка NFC -->
           <path d="M100,68 A26,26 0 0,1 118,75" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
           <path d="M100,82 A16,16 0 0,1 114,88" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
           <path d="M100,97 A7,7 0 0,1 109,101" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
@@ -552,7 +650,7 @@
     </div>
   </div>
 
-  <!-- 3. Polaroid и печать фото -->
+  <!-- 3. Polaroid и печать Hello Kitty -->
   <div class="stage" id="stage">
     <div class="polaroid-cam">
       <div class="cam-shutter"></div>
@@ -594,8 +692,56 @@
     <div class="photo-tray">
       <div class="polaroid-card" id="card">
         <div class="photo-area">
+          <!-- Картинка Hello Kitty -->
           <img src="hello_kitty.JPG" alt="Hello Kitty" id="photoImg">
+
+          <!-- 4. Розовая 3D-голограмма Hello Kitty -->
+          <div class="hologram-stage" id="holoStage">
+            <div class="holo-light-beam"></div>
+
+            <!-- Искорки -->
+            <span class="sparkle sp1">✦</span>
+            <span class="sparkle sp2">✨</span>
+            <span class="sparkle sp3">✦</span>
+            <span class="sparkle sp4">💖</span>
+
+            <div class="holo-kitty-figure" id="holoFigure">
+              <div class="holo-scanlines"></div>
+
+              <!-- Векторная неоновая фигурка Hello Kitty -->
+              <svg viewBox="0 0 140 150" width="100%" height="100%">
+                <path d="M42,95 L30,135 Q70,145 110,135 L98,95 Z" fill="rgba(255, 77, 148, 0.45)" stroke="#ff4d94" stroke-width="3.5"/>
+                <ellipse cx="50" cy="142" rx="14" ry="7" fill="rgba(255, 220, 235, 0.7)" stroke="#ff4d94" stroke-width="3"/>
+                <ellipse cx="90" cy="142" rx="14" ry="7" fill="rgba(255, 220, 235, 0.7)" stroke="#ff4d94" stroke-width="3"/>
+                <path d="M38,30 Q22,8 18,22 Q12,45 22,65 Q30,88 70,88 Q110,88 118,65 Q128,45 122,22 Q118,8 102,30 Q88,24 70,24 Q52,24 38,30 Z" 
+                      fill="rgba(255, 235, 245, 0.85)" stroke="#ff4d94" stroke-width="4"/>
+                <ellipse cx="44" cy="55" rx="4.5" ry="6.5" fill="#ff1493"/>
+                <path d="M90,56 Q97,50 104,56" fill="none" stroke="#ff1493" stroke-width="4" stroke-linecap="round"/>
+                <ellipse cx="70" cy="62" rx="5" ry="3.5" fill="#ffeb3b" stroke="#ff9800" stroke-width="1.5"/>
+                <line x1="12" y1="52" x2="28" y2="55" stroke="#ff4d94" stroke-width="3" stroke-linecap="round"/>
+                <line x1="10" y1="62" x2="27" y2="62" stroke="#ff4d94" stroke-width="3" stroke-linecap="round"/>
+                <line x1="14" y1="72" x2="29" y2="69" stroke="#ff4d94" stroke-width="3" stroke-linecap="round"/>
+                <line x1="112" y1="55" x2="128" y2="52" stroke="#ff4d94" stroke-width="3" stroke-linecap="round"/>
+                <line x1="113" y1="62" x2="130" y2="62" stroke="#ff4d94" stroke-width="3" stroke-linecap="round"/>
+                <line x1="111" y1="69" x2="126" y2="72" stroke="#ff4d94" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="104" cy="24" r="8" fill="#ff1493" stroke="#ffffff" stroke-width="2"/>
+                <ellipse cx="91" cy="18" rx="10" ry="8" transform="rotate(-15 91 18)" fill="#ff4d94" stroke="#ffffff" stroke-width="2"/>
+                <ellipse cx="117" cy="30" rx="10" ry="8" transform="rotate(-15 117 30)" fill="#ff4d94" stroke="#ffffff" stroke-width="2"/>
+                <ellipse cx="54" cy="98" rx="12" ry="9" transform="rotate(30 54 98)" fill="rgba(255, 235, 245, 0.9)" stroke="#ff4d94" stroke-width="3"/>
+                <ellipse cx="86" cy="98" rx="12" ry="9" transform="rotate(-30 86 98)" fill="rgba(255, 235, 245, 0.9)" stroke="#ff4d94" stroke-width="3"/>
+              </svg>
+
+              <!-- Сердечко в лапках -->
+              <div class="holo-heart" id="holoHeart">
+                <svg width="44" height="40" viewBox="0 0 24 22">
+                  <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.28 2,8.5C2,5.42 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.09C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.42 22,8.5C22,12.28 18.6,15.36 13.45,20.04L12,21.35Z" 
+                        fill="#ff1493" stroke="#fff" stroke-width="1.8"/>
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
+
         <div class="photo-words" id="photoWords">
           Наш первый общий снимок начинается здесь ✨
         </div>
@@ -617,9 +763,11 @@
     const photoImg = document.getElementById('photoImg');
     const photoWords = document.getElementById('photoWords');
 
+    const holoStage = document.getElementById('holoStage');
+    const holoHeart = document.getElementById('holoHeart');
+
     let isOpened = false;
 
-    // Звук затвора и моторчика Polaroid
     function playCameraSound() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -651,16 +799,37 @@
           motor.stop(ctx.currentTime + 1.4);
         }, 120);
       } catch (e) {
-        console.warn("Audio Context error", e);
+        console.warn(e);
       }
     }
 
-    // Тап по брелоку
+    function playHoloSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+
+        const freqs = [523.25, 659.25, 783.99, 1046.50];
+        freqs.forEach((f, i) => {
+          setTimeout(() => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(f, ctx.currentTime);
+            gain.gain.setValueAtTime(0.04, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.2);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 1.2);
+          }, i * 160);
+        });
+      } catch (e) {}
+    }
+
     keychainScreen.addEventListener('click', () => {
       if (isOpened) return;
       isOpened = true;
 
-      // 1. Прячем подсказку, распахиваем сердечко
       tapHint.style.opacity = '0';
       heartWrapper.classList.add('opened');
       
@@ -668,7 +837,6 @@
         secretMsg.classList.add('visible');
       }, 300);
 
-      // 2. Ровно через 5 секунд сердечко захлопывается и исчезает
       setTimeout(() => {
         secretMsg.classList.remove('visible');
         heartWrapper.classList.remove('opened');
@@ -686,7 +854,6 @@
       }, 5000);
     });
 
-    // Запуск таймера: 5 -> 4 -> 3 -> 2 -> 1
     function startCountdown() {
       countdownScreen.classList.add('fade-in');
 
@@ -702,7 +869,6 @@
       }, 1000);
     }
 
-    // Появление камеры и печать фото
     function triggerCamera() {
       countdownScreen.classList.remove('fade-in');
       countdownScreen.classList.add('fade-out');
@@ -730,6 +896,24 @@
           setTimeout(() => {
             photoWords.classList.add('show');
           }, 3600);
+
+          // Запуск голограммы
+          setTimeout(() => {
+            playHoloSound();
+            photoImg.classList.add('dimmed');
+            holoStage.classList.add('active');
+
+            setTimeout(() => {
+              holoStage.classList.add('risen');
+            }, 300);
+
+            setTimeout(() => {
+              holoHeart.classList.add('active');
+              photoWords.innerHTML = '«Наконец-то вы вместе! Я так этого ждала 💕»';
+              photoWords.style.color = '#ff4785';
+            }, 1800);
+
+          }, 5200);
 
         }, 650);
 
