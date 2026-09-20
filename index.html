@@ -248,10 +248,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: opacity 1s ease, transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Полное исчезновение камеры */
     .polaroid-cam.vanished {
       opacity: 0;
       transform: translateY(-50px) scale(0.85);
@@ -443,11 +442,11 @@
       opacity: 1;
     }
 
-    /* Карточка плавно ложится на стол */
+    /* Карточка ложится на стол */
     .polaroid-card.laid-flat {
-      transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 2s ease;
-      transform: translateY(-80px) rotateX(62deg) scale(1.02);
-      box-shadow: 0 40px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(255, 50, 130, 0.3);
+      transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 1.8s ease;
+      transform: translateY(-80px) rotateX(55deg) scale(1.02);
+      box-shadow: 0 35px 55px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 50, 130, 0.25);
     }
 
     .photo-area {
@@ -495,7 +494,7 @@
       transform: translateY(0);
     }
 
-    /* 4. ЧИСТАЯ НЕОНОВАЯ ГОЛОГРАММА БЕЗ ПОЛОС И БЕЗ ФОНА */
+    /* 4. ГОЛОГРАММА HELLO KITTY */
     .hologram-stage {
       position: absolute;
       inset: 0;
@@ -514,7 +513,6 @@
       opacity: 1;
     }
 
-    /* Неоновое пятно света на фото */
     .holo-light-beam {
       position: absolute;
       bottom: -15px;
@@ -530,58 +528,56 @@
       100% { opacity: 1; transform: scale(1.15); }
     }
 
-    /* Контейнер фигурки: плавное поэтапное вылезание из плоскости */
+    /* Контейнер фигурки: компенсация ракурса стола (rotateX(-55deg)), чтобы голова не сплющивалась */
     .holo-kitty-figure {
       position: absolute;
-      bottom: 10px;
+      bottom: 8px;
       width: 170px;
-      height: 190px;
+      height: 200px;
       display: flex;
       align-items: center;
       justify-content: center;
       transform-style: preserve-3d;
       transform-origin: bottom center;
 
-      /* Исходно спрятана глубоко внутри фото */
-      transform: rotateX(0deg) translateZ(-50px) translateY(50px) scale(0.55);
+      /* Начало: внутри фото */
+      transform: rotateX(0deg) translateZ(-45px) translateY(45px) scale(0.6);
       opacity: 0;
-      filter: drop-shadow(0 0 10px #ff1493) drop-shadow(0 0 25px rgba(255, 20, 147, 0.8));
+      filter: drop-shadow(0 0 8px #ff1493) drop-shadow(0 0 20px rgba(255, 20, 147, 0.75));
       transition: transform 3s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 1.8s ease;
     }
 
-    /* 1 фаза: ушки и голова вылезают из фото */
+    /* 1 фаза: ушки и бантик поднимаются */
     .hologram-stage.peeking .holo-kitty-figure {
       opacity: 0.85;
-      transform: rotateX(-30deg) translateZ(35px) translateY(15px) scale(0.85);
+      transform: rotateX(-25deg) translateZ(30px) translateY(10px) scale(0.85);
     }
 
-    /* 2 фаза: встает в полный рост вертикально перпендикулярно столу */
+    /* 2 фаза: встает строго вертикально перпендикулярно столу */
     .hologram-stage.risen .holo-kitty-figure {
       opacity: 1;
-      transform: rotateX(-62deg) translateZ(110px) translateY(-35px) scale(1.1);
+      transform: rotateX(-55deg) translateZ(115px) translateY(-30px) scale(1.08);
       animation: holoLevitate 3.6s ease-in-out infinite alternate 3s;
     }
 
     @keyframes holoLevitate {
       0% {
-        transform: rotateX(-62deg) translateZ(105px) translateY(-35px) scale(1.1) rotateZ(-1.5deg);
+        transform: rotateX(-55deg) translateZ(110px) translateY(-30px) scale(1.08) rotateZ(-1.2deg);
       }
       50% {
-        transform: rotateX(-62deg) translateZ(128px) translateY(-46px) scale(1.14) rotateZ(1.5deg);
+        transform: rotateX(-55deg) translateZ(130px) translateY(-40px) scale(1.11) rotateZ(1.2deg);
       }
       100% {
-        transform: rotateX(-62deg) translateZ(107px) translateY(-37px) scale(1.1) rotateZ(-0.5deg);
+        transform: rotateX(-55deg) translateZ(112px) translateY(-32px) scale(1.08) rotateZ(-0.4deg);
       }
     }
 
-    /* Чистый неоновый SVG-контур Hello Kitty */
     .kitty-neon-svg {
       width: 100%;
       height: 100%;
       overflow: visible;
     }
 
-    /* Неоновые линии и заливки */
     .neon-line {
       fill: none;
       stroke: #ff1493;
@@ -591,11 +587,11 @@
     }
 
     .neon-body {
-      fill: rgba(255, 235, 245, 0.88);
+      fill: rgba(255, 235, 245, 0.9);
       stroke: #ff1493;
       stroke-linecap: round;
       stroke-linejoin: round;
-      filter: drop-shadow(0 0 6px #ff1493);
+      filter: drop-shadow(0 0 5px #ff1493);
     }
 
     .neon-dress {
@@ -613,10 +609,10 @@
       filter: drop-shadow(0 0 6px #ff69b4);
     }
 
-    /* Неоновое сердечко между лапок */
+    /* Сердечко расположено прямо в лапках, не заслоняя мордочку */
     .holo-heart {
       position: absolute;
-      top: 96px;
+      top: 132px;
       left: 50%;
       transform: translate(-50%, -50%) scale(0);
       opacity: 0;
@@ -633,12 +629,11 @@
 
     @keyframes heartBeat {
       0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      14% { transform: translate(-50%, -50%) scale(1.28); }
-      28% { transform: translate(-50%, -50%) scale(1.08); }
-      42% { transform: translate(-50%, -50%) scale(1.3); }
+      14% { transform: translate(-50%, -50%) scale(1.25); }
+      28% { transform: translate(-50%, -50%) scale(1.06); }
+      42% { transform: translate(-50%, -50%) scale(1.28); }
     }
 
-    /* Звездочки */
     .sparkle {
       position: absolute;
       color: #ff99cc;
@@ -755,63 +750,70 @@
         <div class="photo-area">
           <img src="hello_kitty.JPG" alt="Hello Kitty" id="photoImg">
 
-          <!-- 4. Чистая неоновая голограмма Hello Kitty -->
+          <!-- 4. Голограмма Hello Kitty с исправленной формой головы -->
           <div class="hologram-stage" id="holoStage">
             <div class="holo-light-beam"></div>
 
             <div class="holo-kitty-figure" id="holoFigure">
-              <!-- Искорки вокруг -->
               <span class="sparkle sp1">✦</span>
               <span class="sparkle sp2">✨</span>
               <span class="sparkle sp3">✦</span>
               <span class="sparkle sp4">💖</span>
 
-              <!-- Каноничные круглые контуры Hello Kitty -->
-              <svg class="kitty-neon-svg" viewBox="0 0 170 185">
-                <!-- Трапециевидное платьице -->
-                <path class="neon-dress" d="M50,105 L32,150 Q85,160 138,150 L120,105 Z" stroke-width="4.5"/>
+              <!-- Исправленный каноничный контур Hello Kitty -->
+              <svg class="kitty-neon-svg" viewBox="0 0 160 200">
+                <!-- Трапециевидное платье -->
+                <path class="neon-dress" d="M52,118 L36,162 Q80,172 124,162 L108,118 Z" stroke-width="4"/>
 
-                <!-- Овальные пухлые ножки -->
-                <ellipse class="neon-body" cx="60" cy="158" rx="18" ry="9.5" stroke-width="4"/>
-                <ellipse class="neon-body" cx="110" cy="158" rx="18" ry="9.5" stroke-width="4"/>
+                <!-- Ножки -->
+                <ellipse class="neon-body" cx="58" cy="170" rx="16" ry="9" stroke-width="3.5"/>
+                <ellipse class="neon-body" cx="102" cy="170" rx="16" ry="9" stroke-width="3.5"/>
 
-                <!-- Широкая приплюснутая круглая голова с каноничными ушками -->
-                <path class="neon-body" d="M46,38 C28,14 20,24 26,48 C14,75 28,96 85,96 C142,96 156,75 144,48 C150,24 142,14 124,38 C110,32 98,30 85,30 C72,30 60,32 46,38 Z" stroke-width="5"/>
+                <!-- Круглая, пропорциональная голова с высокими ушками -->
+                <path class="neon-body" d="
+                  M 45,46
+                  C 35,26 28,26 30,48
+                  C 20,70 30,104 80,104
+                  C 130,104 140,70 130,48
+                  C 132,26 125,26 115,46
+                  C 102,40 92,38 80,38
+                  C 68,38 58,40 45,46 Z
+                " stroke-width="4.5"/>
 
                 <!-- Левый глазик-овал -->
-                <ellipse cx="52" cy="64" rx="5.5" ry="8" fill="#ff0066"/>
+                <ellipse cx="54" cy="72" rx="5" ry="7.5" fill="#ff0066"/>
 
-                <!-- Правый глазик (подмигивающая плавная дуга) -->
-                <path d="M106,64 Q116,55 126,64" fill="none" stroke="#ff0066" stroke-width="5" stroke-linecap="round"/>
+                <!-- Правый подмигивающий глазик -->
+                <path d="M100,72 Q108,64 116,72" fill="none" stroke="#ff0066" stroke-width="4.5" stroke-linecap="round"/>
 
-                <!-- Овальный желтый носик -->
-                <ellipse cx="85" cy="72" rx="6" ry="4" fill="#ffeb3b" stroke="#ff9800" stroke-width="1.8"/>
+                <!-- Желтый овальный носик -->
+                <ellipse cx="80" cy="80" rx="5.5" ry="3.8" fill="#ffeb3b" stroke="#ff9800" stroke-width="1.6"/>
 
-                <!-- Усики слева (ровные, горизонтальные) -->
-                <line class="neon-line" x1="10" y1="60" x2="30" y2="63" stroke-width="4"/>
-                <line class="neon-line" x1="8" y1="72" x2="28" y2="72" stroke-width="4"/>
-                <line class="neon-line" x1="12" y1="84" x2="31" y2="80" stroke-width="4"/>
+                <!-- Усики слева -->
+                <line class="neon-line" x1="14" y1="68" x2="33" y2="71" stroke-width="3.5"/>
+                <line class="neon-line" x1="12" y1="79" x2="31" y2="79" stroke-width="3.5"/>
+                <line class="neon-line" x1="16" y1="90" x2="34" y2="86" stroke-width="3.5"/>
 
                 <!-- Усики справа -->
-                <line class="neon-line" x1="140" y1="63" x2="160" y2="60" stroke-width="4"/>
-                <line class="neon-line" x1="142" y1="72" x2="162" y2="72" stroke-width="4"/>
-                <line class="neon-line" x1="139" y1="80" x2="158" y2="84" stroke-width="4"/>
+                <line class="neon-line" x1="127" y1="71" x2="146" y2="68" stroke-width="3.5"/>
+                <line class="neon-line" x1="129" y1="79" x2="148" y2="79" stroke-width="3.5"/>
+                <line class="neon-line" x1="126" y1="86" x2="144" y2="90" stroke-width="3.5"/>
 
-                <!-- Фирменный объемный бантик на левом ушке -->
-                <circle class="neon-bow" cx="126" cy="28" r="9.5"/>
-                <ellipse class="neon-bow" cx="111" cy="22" rx="13" ry="10" transform="rotate(-18 111 22)"/>
-                <ellipse class="neon-bow" cx="141" cy="34" rx="13" ry="10" transform="rotate(-18 141 34)"/>
+                <!-- Фирменный объемный бантик на ушке -->
+                <circle class="neon-bow" cx="118" cy="38" r="8.5"/>
+                <ellipse class="neon-bow" cx="105" cy="32" rx="11" ry="8.5" transform="rotate(-20 105 32)"/>
+                <ellipse class="neon-bow" cx="131" cy="44" rx="11" ry="8.5" transform="rotate(-20 131 44)"/>
 
-                <!-- Пухлые лапки, сложенные перед собой -->
-                <ellipse class="neon-body" cx="62" cy="112" rx="15" ry="11" transform="rotate(32 62 112)" stroke-width="4"/>
-                <ellipse class="neon-body" cx="108" cy="112" rx="15" ry="11" transform="rotate(-32 108 112)" stroke-width="4"/>
+                <!-- Пухлые лапки, сложенные на груди -->
+                <ellipse class="neon-body" cx="62" cy="126" rx="13" ry="10" transform="rotate(30 62 126)" stroke-width="3.5"/>
+                <ellipse class="neon-body" cx="98" cy="126" rx="13" ry="10" transform="rotate(-30 98 126)" stroke-width="3.5"/>
               </svg>
 
-              <!-- Неоновое пульсирующее сердечко -->
+              <!-- Пульсирующее неоновое сердечко в лапках -->
               <div class="holo-heart" id="holoHeart">
-                <svg width="52" height="48" viewBox="0 0 24 22">
+                <svg width="46" height="42" viewBox="0 0 24 22">
                   <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.28 2,8.5C2,5.42 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.09C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.42 22,8.5C22,12.28 18.6,15.36 13.45,20.04L12,21.35Z" 
-                        fill="#ff0066" stroke="#ffffff" stroke-width="2"/>
+                        fill="#ff0066" stroke="#ffffff" stroke-width="1.8"/>
                 </svg>
               </div>
             </div>
@@ -977,34 +979,33 @@
             photoWords.classList.add('show');
           }, 3600);
 
-          // 4. Пауза 3.5 секунды: девушка рассматривает карточку перед глазами
+          // 4. Пауза: девушка рассматривает карточку перед глазами
           setTimeout(() => {
-            
-            // ШАГ А: Фотоаппарат растворяется и исчезает
+            // ШАГ А: Фотоаппарат растворяется
             polaroidCam.classList.add('vanished');
 
-            // ШАГ Б: Фотокарточка центрируется и ложится на стол
+            // ШАГ Б: Фотокарточка центрируется и плавно ложится на стол
             setTimeout(() => {
               card.classList.add('laid-flat');
 
-              // ШАГ В: Запуск голографического портала
+              // ШАГ В: Запуск голограммы
               setTimeout(() => {
                 playHoloSound();
                 photoImg.classList.add('dimmed');
                 holoStage.classList.add('active');
 
-                // ФАЗА 1: Ушки и голова выныривают из глубины
+                // Фаза 1: Ушки и бантик показываются
                 setTimeout(() => {
                   holoStage.classList.add('peeking');
                 }, 400);
 
-                // ФАЗА 2: Kitty плавно встает в полный рост над столом
+                // Фаза 2: Hello Kitty плавно встает в полный рост
                 setTimeout(() => {
                   holoStage.classList.remove('peeking');
                   holoStage.classList.add('risen');
                 }, 1500);
 
-                // ФАЗА 3: Зажигается пульсирующее неоновое сердечко в лапках
+                // Фаза 3: Зажигается пульсирующее неоновое сердечко в лапках
                 setTimeout(() => {
                   holoHeart.classList.add('active');
                   photoWords.innerHTML = '«Наконец-то вы вместе! Я так этого ждала 💕»';
