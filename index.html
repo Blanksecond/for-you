@@ -524,7 +524,7 @@
       bottom: -15px;
       width: 190px;
       height: 190px;
-      background: radial-gradient(ellipse at center, rgba(255, 20, 147, 0.85) 0%, rgba(255, 20, 147, 0.3) 55%, transparent 75%);
+      background: radial-gradient(ellipse at center, rgba(255, 0, 128, 0.85) 0%, rgba(255, 0, 128, 0.3) 55%, transparent 75%);
       filter: blur(14px);
       animation: portalPulse 2.5s ease-in-out infinite alternate;
     }
@@ -551,7 +551,7 @@
     }
 
     .hologram-stage.peeking .holo-kitty-figure {
-      opacity: 0.9;
+      opacity: 0.95;
       transform: rotateX(-25deg) translateZ(30px) translateY(10px) scale(0.85);
     }
 
@@ -567,22 +567,25 @@
       100% { transform: rotateX(-55deg) translateZ(112px) translateY(-32px) scale(1.08) rotateZ(-0.4deg); }
     }
 
-    /* Гарантированный сочный розовый неон без серого */
-    .kitty-neon-img {
+    /* РЕВОЛЮЦИОННЫЙ СПОСОБ: ЧИСТАЯ CSS-МАСКА */
+    /* Физически заливает контур только розовым неоном, серого цвета быть не может! */
+    .kitty-neon-mask-layer {
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      background: transparent !important;
+      background: linear-gradient(180deg, #ff1493 0%, #ff007f 100%);
+      -webkit-mask-image: url('kitty_holo.png');
+      mask-image: url('kitty_holo.png');
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
       filter: 
-        invert(18%) 
-        sepia(95%) 
-        saturate(7000%) 
-        hue-rotate(305deg) 
-        brightness(110%) 
-        contrast(120%)
-        drop-shadow(0 0 5px #ff1493) 
-        drop-shadow(0 0 12px #ff007f) 
-        drop-shadow(0 0 25px rgba(255, 20, 147, 0.9));
+        drop-shadow(0 0 4px #ff007f) 
+        drop-shadow(0 0 10px #ff1493) 
+        drop-shadow(0 0 20px #ff2a8d)
+        drop-shadow(0 0 35px rgba(255, 0, 128, 0.9));
     }
 
     .sparkle {
@@ -840,7 +843,6 @@
       100% { opacity: 0; transform: translateX(-16px) scale(2.4); }
     }
 
-    /* КНОПКА «ЗАВЕРШИТЬ ОЖИДАНИЕ ❤️» */
     .focus-btn-container {
       margin-top: 30px;
       opacity: 0;
@@ -1034,10 +1036,9 @@
     <div class="photo-tray">
       <div class="polaroid-card" id="card">
         <div class="photo-area">
-          <!-- Картинка Polaroid -->
           <img src="hello_kitty.JPG" alt="Hello Kitty" id="photoImg">
 
-          <!-- 4. Голограмма Hello Kitty из файла kitty_holo.png -->
+          <!-- 4. Голограмма Hello Kitty (CSS Mask) -->
           <div class="hologram-stage" id="holoStage">
             <div class="holo-light-beam"></div>
 
@@ -1047,8 +1048,8 @@
               <span class="sparkle sp3">✦</span>
               <span class="sparkle sp4">💖</span>
 
-              <!-- Прозрачный PNG голограммы -->
-              <img src="kitty_holo.png" alt="Neon Hello Kitty" class="kitty-neon-img">
+              <!-- Слой с чистым розовым неоном по контуру маски -->
+              <div class="kitty-neon-mask-layer"></div>
             </div>
           </div>
         </div>
@@ -1343,7 +1344,7 @@
             setTimeout(() => {
               card.classList.add('laid-flat');
 
-              // 5. Запуск голограммы из kitty_holo.png
+              // 5. Запуск голограммы (CSS Mask)
               setTimeout(() => {
                 playHoloSound();
                 photoImg.classList.add('dimmed');
@@ -1447,7 +1448,7 @@
           line3.classList.add('shown');
         }, 5200);
 
-        // Полное растворение в абсолютную темноту
+        // Полное растворение в 100% темноту
         setTimeout(() => {
           lookUpScreen.classList.add('fade-to-black');
         }, 9500);
