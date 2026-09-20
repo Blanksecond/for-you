@@ -482,6 +482,1284 @@
       filter: brightness(0.25) contrast(0.8);
     }
 
+    /* Текст под фото */
+    .photo-words {
+      margin-top: 14px;
+      color: #242426;
+      font-size: 14px;
+      line-height: 1.45;
+      text-align: center;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 1.6s ease, transform 1.6s ease;
+    }
+
+    .photo-words.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 4. ГОЛОГРАММА HELLO KITTY */
+    .hologram-stage {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      z-index: 50;
+      transform-style: preserve-3d;
+      transition: opacity 1s ease;
+      background: transparent !important;
+    }
+
+    .hologram-stage.active {
+      opacity: 1;
+    }
+
+    .holo-light-beam {
+      position: absolute;
+      bottom: -15px;
+      width: 190px;
+      height: 190px;
+      background: radial-gradient(ellipse at center, rgba(255, 30, 120, 0.75) 0%, rgba(255, 30, 120, 0.22) 55%, transparent 75%);
+      filter: blur(14px);
+      animation: portalPulse 2.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes portalPulse {
+      0% { opacity: 0.7; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1.15); }
+    }
+
+    .holo-kitty-figure {
+      position: absolute;
+      bottom: 5px;
+      width: 165px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
+      transform-origin: bottom center;
+      background: transparent !important;
+      transform: rotateX(0deg) translateZ(-45px) translateY(45px) scale(0.6);
+      opacity: 0;
+      transition: transform 3s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 1.8s ease;
+    }
+
+    .hologram-stage.peeking .holo-kitty-figure {
+      opacity: 0.85;
+      transform: rotateX(-25deg) translateZ(30px) translateY(10px) scale(0.85);
+    }
+
+    .hologram-stage.risen .holo-kitty-figure {
+      opacity: 1;
+      transform: rotateX(-55deg) translateZ(115px) translateY(-30px) scale(1.08);
+      animation: holoLevitate 3.6s ease-in-out infinite alternate 3s;
+    }
+
+    @keyframes holoLevitate {
+      0% { transform: rotateX(-55deg) translateZ(110px) translateY(-30px) scale(1.08) rotateZ(-1.2deg); }
+      50% { transform: rotateX(-55deg) translateZ(130px) translateY(-40px) scale(1.11) rotateZ(1.2deg); }
+      100% { transform: rotateX(-55deg) translateZ(112px) translateY(-32px) scale(1.08) rotateZ(-0.4deg); }
+    }
+
+    .kitty-neon-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      filter: 
+        brightness(1.5)
+        sepia(1) 
+        hue-rotate(295deg) 
+        saturate(9) 
+        drop-shadow(0 0 4px #ff007f) 
+        drop-shadow(0 0 10px #ff1493) 
+        drop-shadow(0 0 25px #ff2a8d) 
+        drop-shadow(0 0 45px rgba(255, 20, 147, 0.9));
+    }
+
+    .sparkle {
+      position: absolute;
+      color: #ff99cc;
+      font-size: 15px;
+      opacity: 0;
+      animation: sparkleFloat 2.2s infinite ease-in-out;
+    }
+    .sp1 { top: -10px; left: 10px; animation-delay: 0.2s; }
+    .sp2 { top: -15px; right: 15px; animation-delay: 0.8s; }
+    .sp3 { top: 60px; right: -5px; animation-delay: 1.4s; }
+    .sp4 { top: 65px; left: -5px; animation-delay: 1.9s; }
+
+    @keyframes sparkleFloat {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: 1; transform: scale(1.25); }
+    }
+
+    /* =======================================================
+       5. ГОРИЗОНТАЛЬНЫЙ МАРШРУТ: КРЫМСК (СЛЕВА) → МОСКВА (СПРАВА)
+       ======================================================= */
+    .journey-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 360px;
+      position: relative;
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+      padding: 10px 0;
+    }
+
+    .journey-screen.visible {
+      display: flex;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Счётчик километров сверху */
+    .distance-hud-top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .hud-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #8e8e93;
+    }
+
+    .hud-km {
+      font-size: 32px;
+      font-weight: 700;
+      color: #ffffff;
+      font-variant-numeric: tabular-nums;
+      margin-top: 2px;
+    }
+
+    .hud-km span {
+      font-size: 15px;
+      color: #ff2a7a;
+      font-weight: 600;
+      margin-left: 4px;
+    }
+
+    /* Горизонтальная карта с городами и дорогой */
+    .map-horizontal-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      position: relative;
+      padding: 0 4px;
+    }
+
+    /* Блоки городов */
+    .city-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      z-index: 5;
+      width: 78px;
+    }
+
+    .city-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #f7f7f9;
+      margin-top: 6px;
+    }
+
+    .city-sub {
+      font-size: 10px;
+      color: #8e8e93;
+      letter-spacing: 0.5px;
+      margin-top: 1px;
+    }
+
+    .krymsk-svg {
+      width: 68px;
+      height: 48px;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+    }
+
+    .kremlin-svg {
+      width: 62px;
+      height: 60px;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.45));
+      transition: filter 1s ease;
+    }
+
+    .kremlin-svg.arrived {
+      filter: drop-shadow(0 0 15px #ff2a7a) drop-shadow(0 0 30px rgba(255, 42, 122, 0.85));
+    }
+
+    /* Горизонтальная железная дорога */
+    .railway-horizontal-track {
+      position: relative;
+      flex: 1;
+      height: 24px;
+      margin: 0 6px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Две рельсы сверху и снизу */
+    .railway-rails {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 2px;
+      bottom: 2px;
+    }
+
+    .railway-rails::before,
+    .railway-rails::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #2a2a32;
+    }
+    .railway-rails::before { top: 3px; }
+    .railway-rails::after  { bottom: 3px; }
+
+    /* Вертикальные шпалы вдоль рельсов */
+    .sleepers-horizontal {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 16px;
+      top: 4px;
+      background: repeating-linear-gradient(
+        90deg,
+        #35353e 0px,
+        #35353e 3px,
+        transparent 3px,
+        transparent 12px
+      );
+    }
+
+    /* Светящийся прогресс пути (слева направо) */
+    .railway-progress-horiz {
+      position: absolute;
+      left: 0;
+      height: 2px;
+      top: 11px;
+      width: 0%;
+      background: linear-gradient(90deg, #ffffff, #ff2a7a);
+      box-shadow: 0 0 12px #ff2a7a;
+      transition: width 5.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* Поезд едет слева направо */
+    .train-cart-horiz {
+      position: absolute;
+      left: 0%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 38px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      z-index: 10;
+      transition: left 5.5s cubic-bezier(0.25, 1, 0.5, 1);
+      filter: drop-shadow(0 0 10px #ff2a7a);
+    }
+
+    .train-body-horiz {
+      width: 34px;
+      height: 18px;
+      background: #ffffff;
+      border-radius: 4px 8px 8px 4px;
+      border: 1.5px solid #ff2a7a;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 3px;
+      position: relative;
+    }
+
+    /* Лобовое стекло (направлено вправо) */
+    .train-windshield-horiz {
+      width: 7px;
+      height: 12px;
+      background: #111;
+      border-radius: 1px 3px 3px 1px;
+    }
+
+    /* Фары смотрят на Москву */
+    .train-headlights-horiz {
+      position: absolute;
+      right: -3px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .headlight-dot {
+      width: 3.5px;
+      height: 3.5px;
+      background: #ffe066;
+      border-radius: 50%;
+      box-shadow: 2px 0 6px #ffe066;
+    }
+
+    /* Дымок позади поезда (слева) */
+    .train-smoke-horiz {
+      position: absolute;
+      left: -6px;
+      width: 6px;
+      height: 6px;
+      background: rgba(255, 42, 122, 0.6);
+      border-radius: 50%;
+      animation: smokeTrailHoriz 0.8s infinite;
+    }
+
+    @keyframes smokeTrailHoriz {
+      0% { opacity: 0.9; transform: translateX(0) scale(1); }
+      100% { opacity: 0; transform: translateX(-12px) scale(2.2); }
+    }
+
+    /* Финальная надпись */
+    .journey-final-msg {
+      margin-top: 36px;
+      font-size: 15px;
+      color: #ffffff;
+      text-align: center;
+      line-height: 1.55;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 1.5s ease, transform 1.5s ease;
+    }
+
+    .journey-final-msg.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .journey-final-msg strong {
+      color: #ff2a7a;
+      display: block;
+      font-size: 17px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Вспышка -->
+  <div class="flash" id="flash"></div>
+
+  <!-- 1. Экран с брелоком -->
+  <div class="keychain-screen" id="keychainScreen">
+    <div class="chain-rig">
+      <div class="keyring"></div>
+      <div class="chain-links">
+        <div class="chain-link"></div>
+        <div class="chain-link"></div>
+        <div class="chain-link"></div>
+      </div>
+    </div>
+
+    <div class="heart-wrapper" id="heartWrapper">
+      <div class="secret-message" id="secretMsg">
+        5 месяцев разлуки закончились прямо сейчас.<br>
+        Этот брелок — напоминание, что мы снова рядом.<br>
+        <strong>Наконец-то мы вместе.</strong>
+      </div>
+
+      <div class="heart-half heart-left">
+        <svg class="heart-shape" viewBox="0 0 200 180">
+          <path d="M100,170 C100,170 10,115 10,55 C10,22 35,5 65,5 C82,5 94,15 100,25 C106,15 118,5 135,5 C165,5 190,22 190,55 C190,115 100,170 100,170 Z" 
+                fill="#f89cb4" stroke="#e07a95" stroke-width="3" filter="drop-shadow(0px 8px 16px rgba(0,0,0,0.4))"/>
+          <path d="M82,75 A26,26 0 0,1 100,68" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M86,88 A16,16 0 0,1 100,82" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M91,101 A7,7 0 0,1 100,97" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div class="heart-half heart-right">
+        <svg class="heart-shape" viewBox="0 0 200 180">
+          <path d="M100,170 C100,170 10,115 10,55 C10,22 35,5 65,5 C82,5 94,15 100,25 C106,15 118,5 135,5 C165,5 190,22 190,55 C190,115 100,170 100,170 Z" 
+                fill="#f89cb4" stroke="#e07a95" stroke-width="3" filter="drop-shadow(0px 8px 16px rgba(0,0,0,0.4))"/>
+          <path d="M100,68 A26,26 0 0,1 118,75" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M100,82 A16,16 0 0,1 114,88" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M100,97 A7,7 0 0,1 109,101" fill="none" stroke="#222" stroke-width="4.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="tap-hint" id="tapHint">Коснись сердечка ✨</div>
+  </div>
+
+  <!-- 2. Экран таймера -->
+  <div class="countdown-screen" id="countdownScreen">
+    <div class="countdown-msg">
+      Сейчас что-то произойдет через <span class="timer-digit" id="timerDigit">5</span>
+    </div>
+  </div>
+
+  <!-- 3. Polaroid и Hello Kitty -->
+  <div class="stage" id="stage">
+    <div class="polaroid-cam" id="polaroidCam">
+      <div class="cam-shutter"></div>
+      <div class="cam-bump"></div>
+
+      <div class="spectrum-stripe">
+        <div class="stripe-red"></div>
+        <div class="stripe-orange"></div>
+        <div class="stripe-yellow"></div>
+        <div class="stripe-green"></div>
+        <div class="stripe-blue"></div>
+      </div>
+
+      <div class="cam-flash">
+        <div class="flash-grid"></div>
+        <div class="flash-sensor-row">
+          <div class="sensor-dot"></div>
+          <div class="sensor-dot"></div>
+          <div class="sensor-dot"></div>
+        </div>
+      </div>
+
+      <div class="cam-lens">
+        <div class="lens-core">
+          <div class="lens-glint"></div>
+        </div>
+      </div>
+
+      <div class="cam-viewfinder">
+        <div class="vf-optic">
+          <div class="vf-glint"></div>
+        </div>
+      </div>
+
+      <div class="cam-brand">polaroid</div>
+      <div class="cam-slot"></div>
+    </div>
+
+    <div class="photo-tray">
+      <div class="polaroid-card" id="card">
+        <div class="photo-area">
+          <img src="hello_kitty.JPG" alt="Hello Kitty" id="photoImg">
+
+          <div class="hologram-stage" id="holoStage">
+            <div class="holo-light-beam"></div>
+
+            <div class="holo-kitty-figure" id="holoFigure">
+              <span class="sparkle sp1">✦</span>
+              <span class="sparkle sp2">✨</span>
+              <span class="sparkle sp3">✦</span>
+              <span class="sparkle sp4">💖</span>
+
+              <img src="kitty_holo.png" alt="Neon Hello Kitty" class="kitty-neon-img">
+            </div>
+          </div>
+        </div>
+
+        <!-- Текст, который больше ни на что не перезаписывается -->
+        <div class="photo-words" id="photoWords">
+          Ты самая красивая кошечка &lt;3
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       5. ГОРИЗОНТАЛЬНЫЙ МАРШРУТ: КРЫМСК (СЛЕВА) → МОСКВА (СПРАВА)
+       ======================================================= -->
+  <div class="journey-screen" id="journeyScreen">
+    <!-- Счётчик километров сверху -->
+    <div class="distance-hud-top">
+      <div class="hud-label">Преодолено</div>
+      <div class="hud-km"><span id="kmCount">0</span><span>км</span></div>
+    </div>
+
+    <!-- Горизонтальная линия движения: Крымск -> Рельсы -> Москва -->
+    <div class="map-horizontal-row">
+      <!-- СЛЕВА: КРЫМСК -->
+      <div class="city-node">
+        <svg class="krymsk-svg" viewBox="0 0 120 70">
+          <polygon points="12,38 28,24 44,38" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round"/>
+          <rect x="16" y="38" width="24" height="26" fill="none" stroke="#ffffff" stroke-width="2.2"/>
+          <rect x="23" y="44" width="10" height="10" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+
+          <polygon points="46,30 64,14 82,30" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linejoin="round"/>
+          <rect x="50" y="30" width="28" height="34" fill="none" stroke="#ffffff" stroke-width="2.4"/>
+          <rect x="58" y="38" width="12" height="14" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+
+          <polygon points="84,40 98,28 112,40" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+          <rect x="88" y="40" width="20" height="24" fill="none" stroke="#ffffff" stroke-width="2"/>
+        </svg>
+        <div class="city-title">Крымск</div>
+        <div class="city-sub">Отправление</div>
+      </div>
+
+      <!-- ЦЕНТР: РЕЛЬСЫ И ПОЕЗД -->
+      <div class="railway-horizontal-track">
+        <div class="railway-rails"></div>
+        <div class="sleepers-horizontal"></div>
+        <div class="railway-progress-horiz" id="railwayProgress"></div>
+
+        <!-- Поезд едет вправо -->
+        <div class="train-cart-horiz" id="trainCart">
+          <div class="train-smoke-horiz"></div>
+          <div class="train-body-horiz">
+            <div class="train-windshield-horiz"></div>
+            <div class="train-headlights-horiz">
+              <div class="headlight-dot"></div>
+              <div class="headlight-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- СПРАВА: МОСКВА -->
+      <div class="city-node">
+        <svg class="kremlin-svg" id="kremlinSvg" viewBox="0 0 100 90">
+          <rect x="36" y="44" width="28" height="42" fill="none" stroke="#ffffff" stroke-width="2.2" rx="1"/>
+          <path d="M44,86 A6,6 0 0,1 56,86 Z" fill="none" stroke="#ffffff" stroke-width="2"/>
+          <circle cx="50" cy="55" r="4.5" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+          <polygon points="50,14 38,44 62,44" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round"/>
+          <polygon points="50,4 52,10 58,10 53,14 55,20 50,16 45,20 47,14 42,10 48,10" fill="#ffffff"/>
+          <path d="M12,86 L12,68 L16,68 L16,72 L20,68 L24,68 L24,72 L28,68 L36,68" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+          <path d="M64,68 L72,68 L72,72 L76,68 L80,68 L80,72 L84,68 L88,68 L88,86" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+          <polygon points="12,68 8,50 16,50" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+          <polygon points="88,68 84,50 92,50" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+        </svg>
+        <div class="city-title">Москва</div>
+        <div class="city-sub">Прибытие</div>
+      </div>
+    </div>
+
+    <!-- Финальное признание -->
+    <div class="journey-final-msg" id="journeyFinalMsg">
+      1 420 км рельсов остались позади.<br>
+      <strong>Наконец-то ты со мной ❤️</strong>
+    </div>
+  </div>
+
+  <script>
+    const keychainScreen = document.getElementById('keychainScreen');
+    const heartWrapper = document.getElementById('heartWrapper');
+    const secretMsg = document.getElementById('secretMsg');
+    const tapHint = document.getElementById('tapHint');
+
+    const countdownScreen = document.getElementById('countdownScreen');
+    const timerDigit = document.getElementById('timerDigit');
+    const stage = document.getElementById('stage');
+    const polaroidCam = document.getElementById('polaroidCam');
+    const flash = document.getElementById('flash');
+    const card = document.getElementById('card');
+    const photoImg = document.getElementById('photoImg');
+    const photoWords = document.getElementById('photoWords');
+
+    const holoStage = document.getElementById('holoStage');
+
+    const journeyScreen = document.getElementById('journeyScreen');
+    const railwayProgress = document.getElementById('railwayProgress');
+    const trainCart = document.getElementById('trainCart');
+    const kmCount = document.getElementById('kmCount');
+    const kremlinSvg = document.getElementById('kremlinSvg');
+    const journeyFinalMsg = document.getElementById('journeyFinalMsg');
+
+    let isOpened = false;
+
+    function playCameraSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(140, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(25, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.8, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.08);
+
+        setTimeout(() => {
+          const motor = ctx.createOscillator();
+          const motorGain = ctx.createGain();
+          motor.type = 'sawtooth';
+          motor.frequency.setValueAtTime(78, ctx.currentTime);
+          motor.frequency.linearRampToValueAtTime(92, ctx.currentTime + 1.4);
+          motorGain.gain.setValueAtTime(0.06, ctx.currentTime);
+          motorGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.4);
+          motor.connect(motorGain);
+          motorGain.connect(ctx.destination);
+          motor.start();
+          motor.stop(ctx.currentTime + 1.4);
+        }, 120);
+      } catch (e) {}
+    }
+
+    function playHoloSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+
+        const freqs = [523.25, 659.25, 783.99, 1046.50];
+        freqs.forEach((f, i) => {
+          setTimeout(() => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(f, ctx.currentTime);
+            gain.gain.setValueAtTime(0.04, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.2);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 1.2);
+          }, i * 160);
+        });
+      } catch (e) {}
+    }
+
+    function playTrainSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+
+        let hits = 0;
+        const trainInterval = setInterval(() => {
+          if (hits > 12) {
+            clearInterval(trainInterval);
+            return;
+          }
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(60, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(20, ctx.currentTime + 0.08);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.08);
+          hits++;
+        }, 360);
+      } catch (e) {}
+    }
+
+    keychainScreen.addEventListener('click', () => {
+      if (isOpened) return;
+      isOpened = true;
+
+      tapHint.style.display = 'none';
+      heartWrapper.classList.add('opened');
+      
+      setTimeout(() => {
+        secretMsg.classList.add('visible');
+      }, 300);
+
+      setTimeout(() => {
+        secretMsg.classList.remove('visible');
+        heartWrapper.classList.remove('opened');
+
+        setTimeout(() => {
+          keychainScreen.classList.add('hidden');
+
+          setTimeout(() => {
+            keychainScreen.style.display = 'none';
+            startCountdown();
+          }, 800);
+
+        }, 600);
+
+      }, 5000);
+    });
+
+    function startCountdown() {
+      countdownScreen.classList.add('fade-in');
+
+      let count = 5;
+      const timerInterval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          timerDigit.textContent = count;
+        } else {
+          clearInterval(timerInterval);
+          triggerCamera();
+        }
+      }, 1000);
+    }
+
+    function triggerCamera() {
+      countdownScreen.classList.remove('fade-in');
+      countdownScreen.classList.add('fade-out');
+
+      setTimeout(() => {
+        countdownScreen.style.display = 'none';
+        stage.classList.add('show');
+
+        setTimeout(() => {
+          playCameraSound();
+          flash.classList.add('active');
+
+          setTimeout(() => {
+            flash.classList.remove('active');
+          }, 90);
+
+          // 1. Печать Polaroid
+          setTimeout(() => {
+            card.classList.add('ejected');
+          }, 250);
+
+          // 2. Проявление фото
+          setTimeout(() => {
+            photoImg.classList.add('developed');
+          }, 1600);
+
+          // 3. Появление текста под фото (он больше не меняется!)
+          setTimeout(() => {
+            photoWords.classList.add('show');
+          }, 3600);
+
+          // 4. Пауза перед тем, как карточка ляжет
+          setTimeout(() => {
+            polaroidCam.classList.add('vanished');
+
+            setTimeout(() => {
+              card.classList.add('laid-flat');
+
+              // 5. Запуск неоновой голограммы
+              setTimeout(() => {
+                playHoloSound();
+                photoImg.classList.add('dimmed');
+                holoStage.classList.add('active');
+
+                setTimeout(() => {
+                  holoStage.classList.add('peeking');
+                }, 400);
+
+                setTimeout(() => {
+                  holoStage.classList.remove('peeking');
+                  holoStage.classList.add('risen');
+                }, 1500);
+
+                // 6. Переход к карте Крымск -> Москва через 6 секунд
+                setTimeout(() => {
+                  startJourneyScene();
+                }, 6000);
+
+              }, 1200);
+
+            }, 600);
+
+          }, 6500);
+
+        }, 650);
+
+      }, 500);
+    }
+
+    // Запуск движения поезда слева направо
+    function startJourneyScene() {
+      stage.classList.add('fade-out');
+
+      setTimeout(() => {
+        stage.style.display = 'none';
+        journeyScreen.classList.add('visible');
+
+        setTimeout(() => {
+          playTrainSound();
+          railwayProgress.style.width = '100%';
+          trainCart.style.left = '100%';
+
+          let currentKm = 0;
+          const targetKm = 1420;
+          const kmInterval = setInterval(() => {
+            currentKm += 28;
+            if (currentKm >= targetKm) {
+              currentKm = targetKm;
+              clearInterval(kmInterval);
+
+              kremlinSvg.classList.add('arrived');
+              journeyFinalMsg.classList.add('visible');
+            }
+            kmCount.textContent = currentKm.toLocaleString('ru-RU');
+          }, 100);
+
+        }, 800);
+
+      }, 900);
+    }
+  </script>
+</body>
+</html>    }
+
+    .flash.active {
+      opacity: 1;
+      transition: opacity 0.03s ease-in;
+    }
+
+    /* 1. ЭКРАН С БРЕЛОКОМ */
+    .keychain-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 320px;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      cursor: pointer;
+    }
+
+    .keychain-screen.hidden {
+      opacity: 0;
+      transform: scale(0.85);
+      pointer-events: none;
+    }
+
+    .chain-rig {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: -6px;
+      z-index: 2;
+    }
+
+    .keyring {
+      width: 38px;
+      height: 38px;
+      border: 4px solid #b0b3b8;
+      border-radius: 50%;
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.6), 0 3px 8px rgba(0,0,0,0.5);
+    }
+
+    .chain-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: -2px;
+    }
+
+    .chain-link {
+      width: 7px;
+      height: 12px;
+      border: 2px solid #8e9297;
+      border-radius: 5px;
+      margin-top: -4px;
+      background: #4a4d52;
+    }
+
+    .heart-wrapper {
+      position: relative;
+      width: 250px;
+      height: 225px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 800px;
+    }
+
+    .secret-message {
+      position: absolute;
+      width: 230px;
+      text-align: center;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #f7f7f7;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      z-index: 1;
+      padding: 10px;
+      pointer-events: none;
+    }
+
+    .secret-message strong {
+      color: #ff9ebb;
+      display: block;
+      margin-top: 6px;
+      font-size: 16px;
+    }
+
+    .secret-message.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .heart-half {
+      position: absolute;
+      top: 0;
+      width: 125px;
+      height: 225px;
+      overflow: hidden;
+      transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 5;
+    }
+
+    .heart-left { left: 0; transform-origin: left center; }
+    .heart-right { right: 0; transform-origin: right center; }
+
+    .heart-wrapper.opened .heart-left { transform: translateX(-70px) rotateY(-65deg); }
+    .heart-wrapper.opened .heart-right { transform: translateX(70px) rotateY(65deg); }
+
+    .heart-shape {
+      position: absolute;
+      width: 250px;
+      height: 225px;
+      top: 0;
+    }
+
+    .heart-left .heart-shape { left: 0; }
+    .heart-right .heart-shape { left: -125px; }
+
+    .tap-hint {
+      margin-top: 24px;
+      font-size: 14px;
+      color: #888892;
+      letter-spacing: 0.5px;
+      animation: pulseText 1.6s ease-in-out infinite;
+      transition: opacity 0.3s ease;
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+
+    /* 2. ЭКРАН ТАЙМЕРА */
+    .countdown-screen {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      opacity: 0;
+      transform: scale(0.94);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .countdown-screen.fade-in {
+      display: flex;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .countdown-screen.fade-out {
+      opacity: 0;
+      transform: scale(0.92);
+      pointer-events: none;
+    }
+
+    .countdown-msg {
+      font-size: 24px;
+      font-weight: 500;
+      color: #e0e0e5;
+      letter-spacing: -0.3px;
+      line-height: 1.4;
+    }
+
+    .timer-digit {
+      display: inline-block;
+      font-size: 36px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-left: 6px;
+      min-width: 24px;
+      animation: digitPop 1s ease-in-out infinite;
+    }
+
+    @keyframes digitPop {
+      0% { transform: scale(1); opacity: 0.85; }
+      40% { transform: scale(1.22); opacity: 1; color: #ff5252; }
+      100% { transform: scale(1); opacity: 0.85; }
+    }
+
+    /* 3. СЦЕНА POLAROID */
+    .stage {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 340px;
+      position: relative;
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+      perspective: 1200px;
+    }
+
+    .stage.show {
+      display: flex;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .stage.fade-out {
+      opacity: 0;
+      transform: scale(0.88);
+      pointer-events: none;
+    }
+
+    .polaroid-cam {
+      width: 310px;
+      height: 250px;
+      background: #18181a;
+      border-radius: 46px 46px 28px 28px;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+      z-index: 20;
+      border: 1px solid #28282b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .polaroid-cam.vanished {
+      opacity: 0;
+      transform: translateY(-50px) scale(0.85);
+      pointer-events: none;
+    }
+
+    .cam-shutter {
+      position: absolute;
+      top: -6px;
+      left: 60px;
+      width: 44px;
+      height: 12px;
+      background: #e63025;
+      border-radius: 6px 6px 0 0;
+      box-shadow: 0 -2px 8px rgba(230, 48, 37, 0.4);
+    }
+
+    .cam-bump {
+      position: absolute;
+      top: -8px;
+      right: 50px;
+      width: 60px;
+      height: 16px;
+      background: #18181a;
+      border-radius: 12px 12px 0 0;
+      border-top: 1px solid #28282b;
+    }
+
+    .spectrum-stripe {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 16px;
+      display: flex;
+      border-radius: 3px;
+      overflow: hidden;
+      z-index: 5;
+    }
+    .stripe-red    { flex: 1; background: #ea3323; }
+    .stripe-orange { flex: 1; background: #f37021; }
+    .stripe-yellow { flex: 1; background: #ffc20e; }
+    .stripe-green  { flex: 1; background: #00a651; }
+    .stripe-blue   { flex: 1; background: #0085ca; }
+
+    .cam-flash {
+      position: absolute;
+      top: 36px;
+      left: 18px;
+      width: 78px;
+      height: 56px;
+      background: #0f0f11;
+      border-radius: 12px;
+      border: 2px solid #2c2c30;
+      overflow: hidden;
+    }
+    .flash-grid {
+      width: 100%;
+      height: 38px;
+      background: repeating-linear-gradient(90deg, rgba(255,255,255,0.7) 0px, rgba(255,255,255,0.7) 2px, rgba(20,20,25,0.6) 2px, rgba(20,20,25,0.6) 4px);
+      border-bottom: 2px solid #333;
+    }
+    .flash-sensor-row {
+      height: 14px;
+      background: #151518;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-left: 6px;
+    }
+    .sensor-dot { width: 4px; height: 4px; background: #2b2b2e; border-radius: 50%; }
+
+    .cam-lens {
+      position: absolute;
+      top: 34px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 106px;
+      height: 106px;
+      border-radius: 50%;
+      background: repeating-radial-gradient(circle, #111113 0, #111113 3px, #222226 3px, #222226 5px);
+      border: 5px solid #252529;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lens-core {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #304254 0%, #080c10 75%);
+      border: 3px solid #141416;
+      position: relative;
+    }
+    .lens-glint {
+      position: absolute;
+      top: 7px;
+      left: 9px;
+      width: 11px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      transform: rotate(-35deg);
+    }
+
+    .cam-viewfinder {
+      position: absolute;
+      top: 36px;
+      right: 18px;
+      width: 78px;
+      height: 58px;
+      background: #0f0f11;
+      border-radius: 12px;
+      border: 2px solid #2c2c30;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .vf-optic {
+      width: 48px;
+      height: 38px;
+      background: radial-gradient(circle at 50% 40%, #1e2832 0%, #0a0e12 80%);
+      border-radius: 8px;
+      border: 1px solid #333;
+      position: relative;
+    }
+    .vf-glint {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      width: 8px;
+      height: 8px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 2px;
+    }
+
+    .cam-brand {
+      position: absolute;
+      right: 28px;
+      bottom: 58px;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: #888890;
+      text-transform: lowercase;
+    }
+
+    .cam-slot {
+      position: absolute;
+      bottom: 22px;
+      width: 250px;
+      height: 14px;
+      background: #09090b;
+      border-radius: 7px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.9);
+      border: 1px solid #222225;
+    }
+
+    /* Лоток выезда фото */
+    .photo-tray {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: -34px;
+      z-index: 10;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    .polaroid-card {
+      width: 240px;
+      background: #fdfbf7;
+      padding: 13px 13px 24px 13px;
+      border-radius: 3px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: translateY(-260px);
+      opacity: 0;
+      transition: transform 3.6s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.3s ease;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    .polaroid-card.ejected {
+      transform: translateY(32px) rotateX(0deg);
+      opacity: 1;
+    }
+
+    .polaroid-card.laid-flat {
+      transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 1.8s ease;
+      transform: translateY(-80px) rotateX(55deg) scale(1.02);
+      box-shadow: 0 35px 55px rgba(0, 0, 0, 0.95), 0 0 30px rgba(255, 50, 130, 0.35);
+    }
+
+    .photo-area {
+      width: 100%;
+      height: 212px;
+      background: #141414;
+      border-radius: 1px;
+      overflow: visible;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    .photo-area img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) brightness(0.18) contrast(0.4);
+      transition: filter 4.5s ease-out, opacity 1.5s ease;
+      border-radius: 1px;
+    }
+
+    .photo-area img.developed {
+      filter: grayscale(0%) brightness(1) contrast(1);
+    }
+
+    .photo-area img.dimmed {
+      opacity: 0.18;
+      filter: brightness(0.25) contrast(0.8);
+    }
+
     .photo-words {
       margin-top: 14px;
       color: #242426;
