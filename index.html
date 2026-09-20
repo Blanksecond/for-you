@@ -25,7 +25,7 @@
       padding: 20px 16px 40px;
     }
 
-    /* Вспышка */
+    /* Вспышка на весь экран */
     .flash {
       position: fixed;
       inset: 0;
@@ -567,13 +567,12 @@
       100% { transform: rotateX(-55deg) translateZ(112px) translateY(-32px) scale(1.08) rotateZ(-0.4deg); }
     }
 
-    /* 100% ГАРАНТИРОВАННОЕ РОЗОВОЕ НЕОНОВОЕ ОКРАШИВАНИЕ (БЕЗ СЕРОГО) */
+    /* Гарантированный сочный розовый неон без серого */
     .kitty-neon-img {
       width: 100%;
       height: 100%;
       object-fit: contain;
       background: transparent !important;
-      /* Превращаем любые серые/темные линии в ярко-розовый неон */
       filter: 
         invert(18%) 
         sepia(95%) 
@@ -603,7 +602,7 @@
       50% { opacity: 1; transform: scale(1.25); }
     }
 
-    /* 5. МАРШРУТ: КРЫМСК → МОСКВА (СИНХРОНИЗИРОВАННЫЙ НА 1207 КМ) */
+    /* 5. МАРШРУТ: КРЫМСК → МОСКВА (1207 КМ) */
     .journey-screen {
       display: none;
       flex-direction: column;
@@ -767,7 +766,6 @@
       box-shadow: 0 0 14px #ff2a7a, 0 0 24px rgba(255, 42, 122, 0.6);
     }
 
-    /* Поезд */
     .train-cart-horiz {
       position: absolute;
       left: 0%;
@@ -1036,9 +1034,10 @@
     <div class="photo-tray">
       <div class="polaroid-card" id="card">
         <div class="photo-area">
+          <!-- Картинка Polaroid -->
           <img src="hello_kitty.JPG" alt="Hello Kitty" id="photoImg">
 
-          <!-- 4. Голограмма Hello Kitty -->
+          <!-- 4. Голограмма Hello Kitty из файла kitty_holo.png -->
           <div class="hologram-stage" id="holoStage">
             <div class="holo-light-beam"></div>
 
@@ -1048,6 +1047,7 @@
               <span class="sparkle sp3">✦</span>
               <span class="sparkle sp4">💖</span>
 
+              <!-- Прозрачный PNG голограммы -->
               <img src="kitty_holo.png" alt="Neon Hello Kitty" class="kitty-neon-img">
             </div>
           </div>
@@ -1343,7 +1343,7 @@
             setTimeout(() => {
               card.classList.add('laid-flat');
 
-              // 5. Запуск голограммы
+              // 5. Запуск голограммы из kitty_holo.png
               setTimeout(() => {
                 playHoloSound();
                 photoImg.classList.add('dimmed');
@@ -1386,17 +1386,14 @@
           playTrainSound();
 
           const totalDistanceKm = 1207;
-          const journeyDurationMs = 7000; // Ровно 7 секунд непрерывного движения
+          const journeyDurationMs = 7000;
           const startTime = performance.now();
 
           function updateTrainProgress(currentTime) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / journeyDurationMs, 1);
 
-            // Плавное ускорение в начале и мягкое замедление перед Кремлём (EaseInOut)
             const easeProgress = 0.5 - Math.cos(progress * Math.PI) / 2;
-
-            // Поезд и рельсы двигаются строго вместе со счётчиком
             const currentKm = Math.floor(easeProgress * totalDistanceKm);
             kmCount.textContent = currentKm.toLocaleString('ru-RU');
 
@@ -1406,7 +1403,6 @@
             if (progress < 1) {
               requestAnimationFrame(updateTrainProgress);
             } else {
-              // Ровно 1 207 км и точное прибытие
               kmCount.textContent = totalDistanceKm.toLocaleString('ru-RU');
               trainCart.style.left = '100%';
               railwayProgress.style.width = '100%';
