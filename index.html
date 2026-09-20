@@ -13,7 +13,7 @@
     }
 
     body {
-      background-color: #07070a;
+      background-color: #060608;
       color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
@@ -416,7 +416,7 @@
       border: 1px solid #222225;
     }
 
-    /* Лоток выезда фото */
+    /* Лоток Polaroid */
     .photo-tray {
       width: 100%;
       display: flex;
@@ -499,7 +499,7 @@
       transform: translateY(0);
     }
 
-    /* 4. ГОЛОГРАММА HELLO KITTY */
+    /* 4. ГОЛОГРАММА HELLO KITTY (ГАРАНТИРОВАННЫЙ РОЗОВЫЙ НЕОН) */
     .hologram-stage {
       position: absolute;
       inset: 0;
@@ -524,7 +524,7 @@
       bottom: -15px;
       width: 190px;
       height: 190px;
-      background: radial-gradient(ellipse at center, rgba(255, 30, 120, 0.75) 0%, rgba(255, 30, 120, 0.22) 55%, transparent 75%);
+      background: radial-gradient(ellipse at center, rgba(255, 20, 147, 0.8) 0%, rgba(255, 20, 147, 0.25) 55%, transparent 75%);
       filter: blur(14px);
       animation: portalPulse 2.5s ease-in-out infinite alternate;
     }
@@ -551,7 +551,7 @@
     }
 
     .hologram-stage.peeking .holo-kitty-figure {
-      opacity: 0.85;
+      opacity: 0.9;
       transform: rotateX(-25deg) translateZ(30px) translateY(10px) scale(0.85);
     }
 
@@ -567,28 +567,22 @@
       100% { transform: rotateX(-55deg) translateZ(112px) translateY(-32px) scale(1.08) rotateZ(-0.4deg); }
     }
 
+    /* Принудительный розовый неоновый фильтр через SVG-матрицу + мощное свечение */
     .kitty-neon-img {
       width: 100%;
       height: 100%;
       object-fit: contain;
       background: transparent !important;
-      border: none !important;
-      outline: none !important;
-      box-shadow: none !important;
-      filter: 
-        brightness(1.5)
-        sepia(1) 
-        hue-rotate(295deg) 
-        saturate(9) 
-        drop-shadow(0 0 4px #ff007f) 
-        drop-shadow(0 0 10px #ff1493) 
-        drop-shadow(0 0 25px #ff2a8d) 
-        drop-shadow(0 0 45px rgba(255, 20, 147, 0.9));
+      filter: url(#pinkNeonFilter) 
+              drop-shadow(0 0 6px #ff007f) 
+              drop-shadow(0 0 14px #ff1493) 
+              drop-shadow(0 0 28px #ff2a8d) 
+              drop-shadow(0 0 50px rgba(255, 0, 128, 0.9));
     }
 
     .sparkle {
       position: absolute;
-      color: #ff99cc;
+      color: #ff80bf;
       font-size: 15px;
       opacity: 0;
       animation: sparkleFloat 2.2s infinite ease-in-out;
@@ -603,16 +597,14 @@
       50% { opacity: 1; transform: scale(1.25); }
     }
 
-    /* =======================================================
-       5. ГОРИЗОНТАЛЬНЫЙ МАРШРУТ: КРЫМСК (СЛЕВА) → МОСКВА (СПРАВА)
-       ======================================================= */
+    /* 5. ГОРИЗОНТАЛЬНЫЙ ДИНАМИЧНЫЙ МАРШРУТ (КРЫМСК → МОСКВА) */
     .journey-screen {
       display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 360px;
+      max-width: 370px;
       position: relative;
       opacity: 0;
       transform: scale(0.92);
@@ -626,6 +618,13 @@
       transform: scale(1);
     }
 
+    .journey-screen.fade-out {
+      opacity: 0;
+      transform: scale(0.9);
+      pointer-events: none;
+      transition: opacity 1.5s ease, transform 1.5s ease;
+    }
+
     .distance-hud-top {
       display: flex;
       flex-direction: column;
@@ -636,20 +635,21 @@
     .hud-label {
       font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
       color: #8e8e93;
     }
 
     .hud-km {
-      font-size: 32px;
+      font-size: 36px;
       font-weight: 700;
       color: #ffffff;
       font-variant-numeric: tabular-nums;
       margin-top: 2px;
+      text-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
     }
 
     .hud-km span {
-      font-size: 15px;
+      font-size: 16px;
       color: #ff2a7a;
       font-weight: 600;
       margin-left: 4px;
@@ -670,7 +670,7 @@
       align-items: center;
       text-align: center;
       z-index: 5;
-      width: 84px;
+      width: 86px;
     }
 
     .city-title {
@@ -689,39 +689,40 @@
       margin-top: 1px;
     }
 
-    /* СТИЛЬНЫЙ ГОРОДСКОЙ ВОКЗАЛ КРЫМСКА */
     .krymsk-svg {
-      width: 76px;
+      width: 78px;
       height: 58px;
       filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.45));
     }
 
     .kremlin-svg {
-      width: 66px;
-      height: 60px;
+      width: 68px;
+      height: 62px;
       filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.45));
-      transition: filter 1s ease;
+      transition: filter 1.2s ease;
     }
 
     .kremlin-svg.arrived {
-      filter: drop-shadow(0 0 15px #ff2a7a) drop-shadow(0 0 30px rgba(255, 42, 122, 0.85));
+      filter: drop-shadow(0 0 16px #ff2a7a) drop-shadow(0 0 35px rgba(255, 42, 122, 0.9));
     }
 
+    /* Анимированная трасса со звездным небом и неоном */
     .railway-horizontal-track {
       position: relative;
       flex: 1;
-      height: 24px;
+      height: 32px;
       margin: 0 6px;
       display: flex;
       align-items: center;
+      overflow: visible;
     }
 
     .railway-rails {
       position: absolute;
       left: 0;
       right: 0;
-      top: 2px;
-      bottom: 2px;
+      top: 6px;
+      bottom: 6px;
     }
 
     .railway-rails::before,
@@ -731,7 +732,7 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: #2a2a32;
+      background: #2a2a34;
     }
     .railway-rails::before { top: 3px; }
     .railway-rails::after  { bottom: 3px; }
@@ -741,123 +742,224 @@
       left: 0;
       right: 0;
       height: 16px;
-      top: 4px;
+      top: 8px;
       background: repeating-linear-gradient(
         90deg,
-        #35353e 0px,
-        #35353e 3px,
+        #363642 0px,
+        #363642 3px,
         transparent 3px,
-        transparent 12px
+        transparent 11px
       );
     }
 
     .railway-progress-horiz {
       position: absolute;
       left: 0;
-      height: 2px;
-      top: 11px;
+      height: 3px;
+      top: 14px;
       width: 0%;
       background: linear-gradient(90deg, #ffffff, #ff2a7a);
-      box-shadow: 0 0 12px #ff2a7a;
-      transition: width 5.5s cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow: 0 0 14px #ff2a7a, 0 0 24px rgba(255, 42, 122, 0.6);
+      transition: width 6.5s cubic-bezier(0.25, 1, 0.4, 1);
     }
 
+    /* Поезд с пульсирующим прожектором */
     .train-cart-horiz {
       position: absolute;
       left: 0%;
       top: 50%;
       transform: translate(-50%, -50%);
-      width: 38px;
-      height: 22px;
+      width: 44px;
+      height: 24px;
       display: flex;
       align-items: center;
       z-index: 10;
-      transition: left 5.5s cubic-bezier(0.25, 1, 0.5, 1);
-      filter: drop-shadow(0 0 10px #ff2a7a);
+      transition: left 6.5s cubic-bezier(0.25, 1, 0.4, 1);
+      filter: drop-shadow(0 0 12px #ff2a7a);
     }
 
     .train-body-horiz {
-      width: 34px;
-      height: 18px;
+      width: 38px;
+      height: 20px;
       background: #ffffff;
-      border-radius: 4px 8px 8px 4px;
+      border-radius: 4px 9px 9px 4px;
       border: 1.5px solid #ff2a7a;
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      padding-right: 3px;
+      padding-right: 4px;
       position: relative;
     }
 
     .train-windshield-horiz {
-      width: 7px;
-      height: 12px;
+      width: 8px;
+      height: 13px;
       background: #111;
       border-radius: 1px 3px 3px 1px;
     }
 
     .train-headlights-horiz {
       position: absolute;
-      right: -3px;
+      right: -4px;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
     }
 
     .headlight-dot {
-      width: 3.5px;
-      height: 3.5px;
+      width: 4px;
+      height: 4px;
       background: #ffe066;
       border-radius: 50%;
-      box-shadow: 2px 0 6px #ffe066;
+      box-shadow: 4px 0 8px #ffe066, 8px 0 14px rgba(255, 224, 102, 0.8);
     }
 
+    /* Мощный световой конус перед поездом */
+    .train-beam-cone {
+      position: absolute;
+      right: -32px;
+      width: 32px;
+      height: 18px;
+      background: linear-gradient(90deg, rgba(255, 224, 102, 0.5) 0%, transparent 100%);
+      clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+      pointer-events: none;
+    }
+
+    /* Искры и дым из-под поезда */
     .train-smoke-horiz {
       position: absolute;
-      left: -6px;
-      width: 6px;
-      height: 6px;
-      background: rgba(255, 42, 122, 0.6);
+      left: -8px;
+      width: 7px;
+      height: 7px;
+      background: rgba(255, 42, 122, 0.7);
       border-radius: 50%;
-      animation: smokeTrailHoriz 0.8s infinite;
+      animation: smokeTrailHoriz 0.6s infinite;
     }
 
     @keyframes smokeTrailHoriz {
       0% { opacity: 0.9; transform: translateX(0) scale(1); }
-      100% { opacity: 0; transform: translateX(-12px) scale(2.2); }
+      100% { opacity: 0; transform: translateX(-16px) scale(2.4); }
     }
 
-    .journey-final-msg {
-      margin-top: 36px;
-      font-size: 15px;
-      color: #ffffff;
-      text-align: center;
-      line-height: 1.55;
-      font-weight: 500;
+    /* КНОПКА «СФОКУСИРОВАТЬСЯ» В ФИНАЛЕ */
+    .focus-btn-container {
+      margin-top: 30px;
       opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 1.5s ease, transform 1.5s ease;
+      transform: translateY(12px);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+      display: flex;
+      justify-content: center;
+      width: 100%;
     }
 
-    .journey-final-msg.visible {
+    .focus-btn-container.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .journey-final-msg strong {
-      color: #ff2a7a;
+    .focus-button {
+      background: rgba(255, 42, 122, 0.14);
+      color: #ffffff;
+      border: 1.5px solid #ff2a7a;
+      padding: 13px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(255, 42, 122, 0.4), inset 0 0 10px rgba(255, 42, 122, 0.2);
+      animation: btnGlowPulse 2.2s infinite ease-in-out;
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    .focus-button:active {
+      transform: scale(0.96);
+      background: rgba(255, 42, 122, 0.35);
+    }
+
+    @keyframes btnGlowPulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(255, 42, 122, 0.35); }
+      50% { box-shadow: 0 0 28px rgba(255, 42, 122, 0.75), 0 0 45px rgba(255, 42, 122, 0.3); }
+    }
+
+    /* =======================================================
+       6. КУЛЬМИНАЦИЯ: «ОТОРВИ ВЗГЛЯД ОТ ЭКРАНА»
+       ======================================================= */
+    .look-up-screen {
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 2s ease;
+    }
+
+    .look-up-screen.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .look-up-text {
+      font-size: 19px;
+      line-height: 2.1;
+      color: #e5e5ea;
+      font-weight: 300;
+      letter-spacing: 0.4px;
+      max-width: 320px;
+    }
+
+    .look-up-line {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 1.8s ease, transform 1.8s ease;
       display: block;
-      font-size: 17px;
-      margin-top: 5px;
+    }
+
+    .look-up-line.shown {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .look-up-line.highlight {
+      font-size: 23px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-top: 14px;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    }
+
+    /* Плавное растворение даже текста в чистый черный цвет */
+    .look-up-screen.fade-to-black .look-up-text {
+      opacity: 0;
+      transition: opacity 2.8s ease;
     }
   </style>
 </head>
 <body>
 
-  <!-- Вспышка -->
+  <!-- SVG-фильтр тонирования в гарантированный сочный розовый неон -->
+  <svg width="0" height="0" style="position: absolute;">
+    <filter id="pinkNeonFilter" color-interpolation-filters="sRGB">
+      <!-- Превращаем яркость в чистую магенту/розовый #ff007f -->
+      <feColorMatrix type="matrix" values="
+        1.5  0    0    0   0.85
+        0    0.05 0    0   0.00
+        0.4  0    1.0  0   0.50
+        0    0    0    1   0" />
+    </filter>
+  </svg>
+
+  <!-- Белая вспышка -->
   <div class="flash" id="flash"></div>
 
-  <!-- 1. Экран с брелоком -->
+  <!-- 1. Экран с интерактивным брелоком-сердечком -->
   <div class="keychain-screen" id="keychainScreen">
     <div class="chain-rig">
       <div class="keyring"></div>
@@ -906,7 +1008,7 @@
     </div>
   </div>
 
-  <!-- 3. Polaroid и Hello Kitty -->
+  <!-- 3. Polaroid и печать Hello Kitty -->
   <div class="stage" id="stage">
     <div class="polaroid-cam" id="polaroidCam">
       <div class="cam-shutter"></div>
@@ -950,6 +1052,7 @@
         <div class="photo-area">
           <img src="hello_kitty.JPG" alt="Hello Kitty" id="photoImg">
 
+          <!-- 4. Голограмма Hello Kitty -->
           <div class="hologram-stage" id="holoStage">
             <div class="holo-light-beam"></div>
 
@@ -971,9 +1074,7 @@
     </div>
   </div>
 
-  <!-- =======================================================
-       5. ГОРИЗОНТАЛЬНЫЙ МАРШРУТ: КРЫМСК (ВОКЗАЛ) → МОСКВА (КРЕМЛЬ)
-       ======================================================= -->
+  <!-- 5. ДИНАМИЧНЫЙ МАРШРУТ: КРЫМСК (ВОКЗАЛ) → МОСКВА (КРЕМЛЬ) -->
   <div class="journey-screen" id="journeyScreen">
     <div class="distance-hud-top">
       <div class="hud-label">Преодолено</div>
@@ -981,32 +1082,23 @@
     </div>
 
     <div class="map-horizontal-row">
-      <!-- СЛЕВА: КРЫМСК (СТИЛЬНЫЙ ГОРОДСКОЙ ВОКЗАЛ) -->
+      <!-- СЛЕВА: ВОКЗАЛ КРЫМСКА -->
       <div class="city-node">
         <svg class="krymsk-svg" viewBox="0 0 110 80">
-          <!-- Фон: силуэты городских высоток -->
           <rect x="14" y="22" width="16" height="46" fill="none" stroke="#555562" stroke-width="1.2"/>
           <rect x="80" y="16" width="16" height="52" fill="none" stroke="#555562" stroke-width="1.2"/>
-          <!-- Окошки в зданиях на фоне -->
           <line x1="18" y1="28" x2="26" y2="28" stroke="#777788" stroke-width="1.2"/>
           <line x1="18" y1="36" x2="26" y2="36" stroke="#777788" stroke-width="1.2"/>
           <line x1="84" y1="24" x2="92" y2="24" stroke="#777788" stroke-width="1.2"/>
           <line x1="84" y1="32" x2="92" y2="32" stroke="#777788" stroke-width="1.2"/>
 
-          <!-- Центральное здание вокзала -->
           <rect x="26" y="38" width="58" height="30" fill="none" stroke="#ffffff" stroke-width="2.2" rx="1"/>
-          
-          <!-- Классический фронтон с карнизом -->
           <polygon points="55,26 24,38 86,38" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round"/>
-          
-          <!-- Часовая башня со шпилем -->
           <rect x="49" y="12" width="12" height="14" fill="none" stroke="#ffffff" stroke-width="2"/>
           <circle cx="55" cy="19" r="3.2" fill="none" stroke="#ffffff" stroke-width="1.4"/>
           <line x1="55" y1="12" x2="55" y2="4" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
 
-          <!-- Парадный вход (высокая вокзальная арка) -->
           <path d="M48,68 L48,50 A7,7 0 0,1 62,50 L62,68 Z" fill="none" stroke="#ffffff" stroke-width="2"/>
-          <!-- Колонны по бокам арки -->
           <line x1="36" y1="42" x2="36" y2="68" stroke="#ffffff" stroke-width="1.8"/>
           <line x1="42" y1="42" x2="42" y2="68" stroke="#ffffff" stroke-width="1.8"/>
           <line x1="68" y1="42" x2="68" y2="68" stroke="#ffffff" stroke-width="1.8"/>
@@ -1016,7 +1108,7 @@
         <div class="city-sub">Отправление</div>
       </div>
 
-      <!-- ЦЕНТР: РЕЛЬСЫ И ПОЕЗД -->
+      <!-- ЦЕНТР: СКОРОСТНАЯ ЖЕЛЕЗНАЯ ДОРОГА -->
       <div class="railway-horizontal-track">
         <div class="railway-rails"></div>
         <div class="sleepers-horizontal"></div>
@@ -1030,6 +1122,7 @@
               <div class="headlight-dot"></div>
               <div class="headlight-dot"></div>
             </div>
+            <div class="train-beam-cone"></div>
           </div>
         </div>
       </div>
@@ -1052,9 +1145,18 @@
       </div>
     </div>
 
-    <div class="journey-final-msg" id="journeyFinalMsg">
-      1 420 км рельсов остались позади.<br>
-      <strong>Наконец-то ты со мной ❤️</strong>
+    <!-- КНОПКА ФИНАЛЬНОГО ДЕЙСТВИЯ -->
+    <div class="focus-btn-container" id="focusBtnContainer">
+      <button class="focus-button" id="focusBtn">Сфокусироваться ✨</button>
+    </div>
+  </div>
+
+  <!-- 6. ЭКРАН РАЗРЫВА ШАБЛОНА: «ОТОРВИ ВЗГЛЯД ОТ ЭКРАНА» -->
+  <div class="look-up-screen" id="lookUpScreen">
+    <div class="look-up-text">
+      <span class="look-up-line" id="line1">Всё, что в этом экране — уже прошлое.</span>
+      <span class="look-up-line" id="line2">Подними глаза.</span>
+      <span class="look-up-line highlight" id="line3">Я стою перед тобой.</span>
     </div>
   </div>
 
@@ -1080,7 +1182,13 @@
     const trainCart = document.getElementById('trainCart');
     const kmCount = document.getElementById('kmCount');
     const kremlinSvg = document.getElementById('kremlinSvg');
-    const journeyFinalMsg = document.getElementById('journeyFinalMsg');
+    const focusBtnContainer = document.getElementById('focusBtnContainer');
+    const focusBtn = document.getElementById('focusBtn');
+
+    const lookUpScreen = document.getElementById('lookUpScreen');
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const line3 = document.getElementById('line3');
 
     let isOpened = false;
 
@@ -1140,15 +1248,16 @@
       } catch (e) {}
     }
 
+    let trainAudioInterval = null;
     function playTrainSound() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         if (ctx.state === 'suspended') ctx.resume();
 
         let hits = 0;
-        const trainInterval = setInterval(() => {
-          if (hits > 12) {
-            clearInterval(trainInterval);
+        trainAudioInterval = setInterval(() => {
+          if (hits > 18) {
+            clearInterval(trainAudioInterval);
             return;
           }
           const osc = ctx.createOscillator();
@@ -1163,7 +1272,7 @@
           osc.start();
           osc.stop(ctx.currentTime + 0.08);
           hits++;
-        }, 360);
+        }, 340);
       } catch (e) {}
     }
 
@@ -1263,7 +1372,7 @@
                   holoStage.classList.add('risen');
                 }, 1500);
 
-                // 6. Переход к карте Крымск -> Москва
+                // 6. Переход к карте поезда через 6 секунд
                 setTimeout(() => {
                   startJourneyScene();
                 }, 6000);
@@ -1294,21 +1403,61 @@
           let currentKm = 0;
           const targetKm = 1420;
           const kmInterval = setInterval(() => {
-            currentKm += 28;
+            currentKm += 22;
             if (currentKm >= targetKm) {
               currentKm = targetKm;
               clearInterval(kmInterval);
 
+              // Поезд прибыл в Москву
               kremlinSvg.classList.add('arrived');
-              journeyFinalMsg.classList.add('visible');
+
+              // Показываем кнопку «Сфокусироваться»
+              setTimeout(() => {
+                focusBtnContainer.classList.add('visible');
+              }, 600);
             }
             kmCount.textContent = currentKm.toLocaleString('ru-RU');
-          }, 100);
+          }, 95);
 
         }, 800);
 
       }, 900);
     }
+
+    // ===============================================
+    // ФИНАЛ: НАЖАТИЕ НА «СФОКУСИРОВАТЬСЯ»
+    // ===============================================
+    focusBtn.addEventListener('click', () => {
+      // Плавное затухание интерфейса
+      journeyScreen.classList.add('fade-out');
+      if (trainAudioInterval) clearInterval(trainAudioInterval);
+
+      // Включение абсолютно черного экрана
+      setTimeout(() => {
+        lookUpScreen.classList.add('active');
+
+        // Строка 1: «Всё, что в этом экране — уже прошлое.»
+        setTimeout(() => {
+          line1.classList.add('shown');
+        }, 1200);
+
+        // Строка 2: «Подними глаза.»
+        setTimeout(() => {
+          line2.classList.add('shown');
+        }, 3200);
+
+        // Строка 3: «Я стою перед тобой.»
+        setTimeout(() => {
+          line3.classList.add('shown');
+        }, 5200);
+
+        // Через 4.5 секунды буквы медленно растворяются в 100% темноту
+        setTimeout(() => {
+          lookUpScreen.classList.add('fade-to-black');
+        }, 9500);
+
+      }, 1000);
+    });
   </script>
 </body>
 </html>
