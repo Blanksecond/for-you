@@ -473,8 +473,8 @@
     }
 
     .photo-area img.dimmed {
-      opacity: 0.2;
-      filter: brightness(0.3) contrast(0.8);
+      opacity: 0.18;
+      filter: brightness(0.25) contrast(0.8);
     }
 
     /* Текст под фото */
@@ -495,7 +495,7 @@
       transform: translateY(0);
     }
 
-    /* 4. ТОЧНАЯ ГОЛОГРАММА ИЗ ФАЙЛА KITTY_HOLO */
+    /* 4. ЧИСТАЯ НЕОНОВАЯ ГОЛОГРАММА ИЗ KITTY_HOLO.PNG */
     .hologram-stage {
       position: absolute;
       inset: 0;
@@ -508,6 +508,7 @@
       z-index: 50;
       transform-style: preserve-3d;
       transition: opacity 1s ease;
+      background: transparent !important;
     }
 
     .hologram-stage.active {
@@ -529,25 +530,26 @@
       100% { opacity: 1; transform: scale(1.15); }
     }
 
-    /* Контейнер фигурки с компенсацией наклона стола */
+    /* Контейнер фигурки Hello Kitty */
     .holo-kitty-figure {
       position: absolute;
       bottom: 5px;
       width: 165px;
-      height: 215px;
+      height: 220px;
       display: flex;
       align-items: center;
       justify-content: center;
       transform-style: preserve-3d;
       transform-origin: bottom center;
+      background: transparent !important;
 
-      /* Начало: внутри фото */
+      /* Начало: спрятана в глубине фото */
       transform: rotateX(0deg) translateZ(-45px) translateY(45px) scale(0.6);
       opacity: 0;
       transition: transform 3s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 1.8s ease;
     }
 
-    /* 1 фаза: ушки и цветок выныривают */
+    /* 1 фаза: верхушка выныривает */
     .hologram-stage.peeking .holo-kitty-figure {
       opacity: 0.85;
       transform: rotateX(-25deg) translateZ(30px) translateY(10px) scale(0.85);
@@ -572,14 +574,19 @@
       }
     }
 
-    /* Истинное неоновое изображение 1 в 1 с фото */
+    /* Прозрачный PNG без фона с неоновым свечением */
     .kitty-neon-img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      /* Режим screen удаляет черный фон, оставляя только яркий розовый неон */
-      mix-blend-mode: screen;
-      filter: drop-shadow(0 0 10px #ff1493) drop-shadow(0 0 25px rgba(255, 20, 147, 0.8));
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      filter: 
+        drop-shadow(0 0 4px #ff69b4) 
+        drop-shadow(0 0 12px #ff1493) 
+        drop-shadow(0 0 28px rgba(255, 20, 147, 0.85));
     }
 
     /* Звездочки */
@@ -699,7 +706,7 @@
         <div class="photo-area">
           <img src="hello_kitty.JPG" alt="Hello Kitty" id="photoImg">
 
-          <!-- 4. Голограмма Hello Kitty один в один из фото -->
+          <!-- 4. Голограмма Hello Kitty (файл kitty_holo.png) -->
           <div class="hologram-stage" id="holoStage">
             <div class="holo-light-beam"></div>
 
@@ -709,8 +716,8 @@
               <span class="sparkle sp3">✦</span>
               <span class="sparkle sp4">💖</span>
 
-              <!-- Файл неоновой Hello Kitty без черного фона -->
-              <img src="kitty_holo.jpg" alt="Neon Hello Kitty" class="kitty-neon-img">
+              <!-- Прозрачный PNG с неоновой Hello Kitty -->
+              <img src="kitty_holo.png" alt="Neon Hello Kitty" class="kitty-neon-img">
             </div>
           </div>
         </div>
@@ -803,7 +810,7 @@
       if (isOpened) return;
       isOpened = true;
 
-      // Мгновенно убираем подсказку полностью
+      // Мгновенно убираем подсказку
       tapHint.style.display = 'none';
       heartWrapper.classList.add('opened');
       
@@ -874,16 +881,16 @@
             photoWords.classList.add('show');
           }, 3600);
 
-          // 4. Пауза: девушка любуется снимком
+          // 4. Пауза перед трансформацией
           setTimeout(() => {
-            // ШАГ А: Фотоаппарат растворяется
+            // ШАГ А: Фотоаппарат исчезает
             polaroidCam.classList.add('vanished');
 
             // ШАГ Б: Фотокарточка ложится на стол
             setTimeout(() => {
               card.classList.add('laid-flat');
 
-              // ШАГ В: Запуск голограммы из картинки kitty_holo.jpg
+              // ШАГ В: Запуск голограммы
               setTimeout(() => {
                 playHoloSound();
                 photoImg.classList.add('dimmed');
